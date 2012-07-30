@@ -9,11 +9,11 @@
 	<packaging>apklib</packaging>
 	<name>com.uppidy.andoroid.sdk</name>
 	<description>Uppidy Android SDK</description>
-	<url>https://develop.uppidy.com/public/docs/uppidy-android-samples</url>
+	<url>https://develop.uppidy.com/public/docs/uppidy-android-sdk</url>
 	<scm>
-		<connection>scm:git:ssh://git@github.com/uppidy/uppidy-android-demo.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/uppidy/uppidy-android-demo.git</developerConnection>
-		<url>https://github.com/uppidy/uppidy-android-demo</url>
+		<connection>scm:git:ssh://git@github.com/uppidy/uppidy-android-sdk.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/uppidy/uppidy-android-sdk.git</developerConnection>
+		<url>https://github.com/uppidy/uppidy-android-sdk</url>
 		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
@@ -28,8 +28,8 @@
 			<url>https://admin.uppidy.com/artifactory/libs-snapshot-local</url>
 		</snapshotRepository>
 		<site>
-			<id>uppidy-android-demo-site</id>
-			<url>file:///var/www/develop/public/docs/uppidy-android-demo</url>
+			<id>uppidy-android-sdk-site</id>
+			<url>file:///var/www/develop/public/docs/uppidy-android-sdk</url>
 		</site>
 	</distributionManagement>
 	<issueManagement>
