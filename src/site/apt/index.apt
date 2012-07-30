@@ -6,13 +6,13 @@
  2012-07-27
  ------
 
-Uppidy Common
+Uppidy Android SDK
 
- Uppidy Common module contains classes that are shared between client and server modules to assure consistency of data structures.
+ Uppidy Android SDK module provides access to Uppidy Web Services API and contains framework for development of backup data providers
 
 * Examples
 
-   The following examples show how to use some of the shared classes:
+   The following examples show how to use some of the core classes:
 
    * {{{./examples/sync.html}Backup}}
 
