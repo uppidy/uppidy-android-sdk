@@ -245,11 +245,6 @@
 			<artifactId>support-v4</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.uppidy</groupId>
-			<artifactId>uppidy-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.android</groupId>
 			<artifactId>spring-android-rest-template</artifactId>
 		</dependency>

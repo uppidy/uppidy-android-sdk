@@ -3,9 +3,6 @@ package com.uppidy.android.sdk.social.api;
 import org.springframework.social.ApiBinding;
 import org.springframework.web.client.RestOperations;
 
-import com.uppidy.server.api.BackupOperations;
-import com.uppidy.server.api.FeedOperations;
-import com.uppidy.server.api.UserOperations;
 
 public interface Uppidy extends ApiBinding {
 

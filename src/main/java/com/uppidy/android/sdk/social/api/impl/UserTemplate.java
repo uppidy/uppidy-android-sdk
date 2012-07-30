@@ -9,10 +9,10 @@ import org.springframework.social.facebook.api.ImageType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.uppidy.android.sdk.social.api.Profile;
+import com.uppidy.android.sdk.social.api.Reference;
 import com.uppidy.android.sdk.social.api.UppidyApi;
-import com.uppidy.server.api.Profile;
-import com.uppidy.server.api.Reference;
-import com.uppidy.server.api.UserOperations;
+import com.uppidy.android.sdk.social.api.UserOperations;
 
 class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 

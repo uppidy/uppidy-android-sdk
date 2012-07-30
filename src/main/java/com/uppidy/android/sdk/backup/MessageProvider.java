@@ -4,8 +4,9 @@
 package com.uppidy.android.sdk.backup;
 
 import java.util.List;
-import com.uppidy.server.api.Message;
-import com.uppidy.server.api.Contact;
+
+import com.uppidy.android.sdk.social.api.Contact;
+import com.uppidy.android.sdk.social.api.Message;
 
 /**
  * @author Vyacheslav Mukhortov

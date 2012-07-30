@@ -18,11 +18,11 @@ import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.uppidy.android.sdk.social.api.BackupOperations;
+import com.uppidy.android.sdk.social.api.Message;
+import com.uppidy.android.sdk.social.api.Reference;
+import com.uppidy.android.sdk.social.api.Sync;
 import com.uppidy.android.sdk.social.api.Uppidy;
-import com.uppidy.server.api.BackupOperations;
-import com.uppidy.server.api.Message;
-import com.uppidy.server.api.Reference;
-import com.uppidy.server.api.Sync;
 
 import de.akquinet.android.androlog.Log;
 

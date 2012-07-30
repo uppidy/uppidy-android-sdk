@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.uppidy.android.sdk.social.api.FeedOperations;
+import com.uppidy.android.sdk.social.api.Message;
 import com.uppidy.android.sdk.social.api.UppidyApi;
-import com.uppidy.server.api.FeedOperations;
-import com.uppidy.server.api.Message;
 
 class FeedTemplate extends AbstractUppidyOperations implements FeedOperations {
 

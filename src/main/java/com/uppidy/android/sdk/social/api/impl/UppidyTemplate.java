@@ -26,11 +26,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
+import com.uppidy.android.sdk.social.api.BackupOperations;
+import com.uppidy.android.sdk.social.api.FeedOperations;
 import com.uppidy.android.sdk.social.api.Uppidy;
 import com.uppidy.android.sdk.social.api.UppidyApi;
-import com.uppidy.server.api.BackupOperations;
-import com.uppidy.server.api.FeedOperations;
-import com.uppidy.server.api.UserOperations;
+import com.uppidy.android.sdk.social.api.UserOperations;
 
 /**
  * <p>This is the central class for interacting with Uppidy.</p>

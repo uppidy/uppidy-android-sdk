@@ -8,13 +8,13 @@ import java.util.Map;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.uppidy.android.sdk.social.api.BackupOperations;
+import com.uppidy.android.sdk.social.api.Contact;
+import com.uppidy.android.sdk.social.api.Container;
+import com.uppidy.android.sdk.social.api.Conversation;
+import com.uppidy.android.sdk.social.api.Message;
+import com.uppidy.android.sdk.social.api.Sync;
 import com.uppidy.android.sdk.social.api.UppidyApi;
-import com.uppidy.server.api.BackupOperations;
-import com.uppidy.server.api.Contact;
-import com.uppidy.server.api.Container;
-import com.uppidy.server.api.Conversation;
-import com.uppidy.server.api.Message;
-import com.uppidy.server.api.Sync;
 
 // TODO (AR): add missing implementations
 class BackupTemplate extends AbstractUppidyOperations implements BackupOperations {

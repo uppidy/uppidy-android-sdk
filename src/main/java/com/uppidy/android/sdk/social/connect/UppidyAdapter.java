@@ -6,8 +6,8 @@ import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UserProfileBuilder;
 
+import com.uppidy.android.sdk.social.api.Profile;
 import com.uppidy.android.sdk.social.api.Uppidy;
-import com.uppidy.server.api.Profile;
 
 /**
  * Uppidy ApiAdapter implementation.
