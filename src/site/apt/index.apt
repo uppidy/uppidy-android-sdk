@@ -1,0 +1,19 @@
+ ------
+ Introduction
+ ------
+ Alex Rudnev
+ ------
+ 2012-07-27
+ ------
+
+Uppidy Common
+
+ Uppidy Common module contains classes that are shared between client and server modules to assure consistency of data structures.
+
+* Examples
+
+   The following examples show how to use some of the shared classes:
+
+   * {{{./examples/sync.html}Backup}}
+
+   * {{{./examples/load.html}Load}}

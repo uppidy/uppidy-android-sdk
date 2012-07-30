@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/FML/1.0 http://maven.apache.org/xsd/fml-1.0.xsd" id="FAQ" title="Frequently Asked Questions">
+  <part id="General">
+    <title>General</title>
+    <faq id="How to include uppidy-android-sdk into a project">
+      <question>How to include uppidy-android-sdk into a project?</question>
+      <answer>
+        <p>
+          This is a maven project, so you just need to add the following dependency into your pom.xml:
+        </p>
+        <source>
+<![CDATA[
+<project>
+	...
+	<dependencies>
+		...
+		<dependency>
+			<groupId>com.uppidy</groupId>
+			<artifactId>uppidy-android-sdk</artifactId>
+			<type>apklib</type>
+			<version>12.07</version>
+		</dependency>
+		...
+	</dependencies>
+	...
+</project>]]></source>
+        <p>
+          <strong>Note</strong> that module version has to be adjusted to the uppidy-android-sdk version you are using.
+        </p>
+      </answer>
+    </faq>
+  </part>
+</faqs>

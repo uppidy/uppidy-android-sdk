@@ -1,0 +1,45 @@
+ ------
+ Backup
+ ------
+ Alex Rudnev
+ <arudnev@uppidy.com>
+ ------
+ 2012-07-27
+ ------
+
+Backing up contacts, messages, conversations
+
+  To backup your content you need to lookup or create a backup container first.
+  Normally you would just extend message provider to define code for loading of messages and contacts.
+  In this example we will just show use of backup operations as it would be done in backup service.
+
+%{toc|section=1|fromDepth=2|toDepth=3}
+
+* Container
+
+  All the items are going to be stored in a backup container.
+
+  Normally you would have single backup container per source of information that you want to backup, i.e. one for SMS / MMS messages on specific device.
+  Before creating a new container you should make an effort to look it up based on parameters that would identify such a container.
+  At this point we only support <<<id>>>, <<<number>>> and <<<deviceId>>> as possible names for query parameters for <<<listContainers>>> operation:
+
++-----+
+// how to init a container
++-----+
+
+* Contact
+
+  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
+
++-----+
+// how to create a contact
++-----+
+
+* Message
+
+  <<<Message>>> represents information about a post in a conversation. <<<Message>>> direction is indicated by <<<sent>>> flag, 
+  time when it was sent is captured by <<<sentTime>>> property, references <<<to>>> and <<<from>>> includes address and name of the contacts.
+  
++-----+
+// how to construct a message
++-----+

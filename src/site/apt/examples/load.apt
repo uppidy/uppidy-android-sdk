@@ -1,0 +1,39 @@
+ ------
+ Load
+ ------
+ Alex Rudnev
+ <arudnev@uppidy.com>
+ ------
+ 2012-07-27
+ ------
+
+Loading contacts, messages, conversations
+
+  To load your content back you can either use search or need to lookup a backup container and load its items directly.
+
+%{toc|section=1|fromDepth=2|toDepth=3}
+
+* Container
+
+  In case of loading of items you need to select a backup container that you want to use as source of information.
+
++-----+
+// how to list containers
++-----+
+
+* Contact
+
+  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
+
++-----+
+// how to list contacts
++-----+
+
+* Message
+
+  <<<Message>>> represents information about a post in a conversation. <<<Message>>> direction is indicated by <<<sent>>> flag, 
+  time when it was sent is captured by <<<sentTime>>> property, references <<<to>>> and <<<from>>> includes address and name of the contacts.
+  
++-----+
+// how to list messages
++-----+
