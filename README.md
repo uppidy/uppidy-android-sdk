@@ -15,20 +15,20 @@ report any bugs or feature requests and to see the list of known issues.
 The build requires [Maven](http://maven.apache.org/download.html)
 v3.0.4+ and the [Android SDK](http://developer.android.com/sdk/index.html)
 to be installed in your development environment. In addition you'll need to set
-the `ANDROID_HOME` environment variable to the location of your SDK:
+the 'ANDROID_HOME' environment variable to the location of your SDK:
 
     export ANDROID_HOME=/opt/tools/android-sdk
 
 After satisfying those requirements, the build is pretty simple:
 
-* Run `mvn clean package` from the root directory to build the APK
+* Run 'mvn clean package' from the root directory to build the APK
 
 See [here](https://github.com/uppidy/uppidy-android-sdk/wiki/Building-From-Eclipse) for
 instructions on building from [Eclipse](http://eclipse.org).
 
 ## Acknowledgements
 
-This project is built on top of [Uppidy API 12.07](http://develop.uppidy.com/).
+This project is built on top of [Uppidy Web Services API 12.07](http://develop.uppidy.com/).
 
 It also uses many other open source libraries such as:
 
