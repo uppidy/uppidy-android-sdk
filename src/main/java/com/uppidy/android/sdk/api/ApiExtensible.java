@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import java.util.Map;
  * 
  * @author arudnev@uppidy.com
  */
-public class Extensible {
+public class ApiExtensible {
 	private Map<String, String> extra;
 
 	/**

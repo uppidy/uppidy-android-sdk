@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 /**
  * A reference to an application.
@@ -7,7 +7,7 @@ package com.uppidy.android.sdk.social.api;
  * 
  * @author arudnev@uppidy.com
  */
-public class AppInfo {
+public class ApiAppInfo {
 
 	private String id;
 	private String name;

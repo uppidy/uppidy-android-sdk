@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.Date;
 import java.util.List;
@@ -10,13 +10,13 @@ import java.util.List;
  * 
  * @author arudnev@uppidy.com
  */
-public class Message {
+public class ApiMessage {
 	
 	private String id;
 	
-	private ContactInfo from;
+	private ApiContactInfo from;
 
-	private List<ContactInfo> to;
+	private List<ApiContactInfo> to;
 
 	private String text;
 	
@@ -28,13 +28,13 @@ public class Message {
 
 	private Date updatedTime;
 	
-	private Location location;
+	private ApiLocation location;
 	
 	public Date getCreatedTime() {
 		return createdTime;
 	}
 
-	public ContactInfo getFrom() {
+	public ApiContactInfo getFrom() {
 		return from;
 	}
 
@@ -54,7 +54,7 @@ public class Message {
 		return sentTime;
 	}
 
-	public List<ContactInfo> getTo() {
+	public List<ApiContactInfo> getTo() {
 		return to;
 	}
 
@@ -66,7 +66,7 @@ public class Message {
 		this.createdTime = createdTime;
 	}
 
-	public void setFrom(ContactInfo from) {
+	public void setFrom(ApiContactInfo from) {
 		this.from = from;
 	}
 
@@ -86,7 +86,7 @@ public class Message {
 		this.sentTime = sentTime;
 	}
 
-	public void setTo(List<ContactInfo> to) {
+	public void setTo(List<ApiContactInfo> to) {
 		this.to = to;
 	}
 
@@ -97,14 +97,14 @@ public class Message {
 	/**
 	 * @return the location
 	 */
-	public Location getLocation() {
+	public ApiLocation getLocation() {
 		return location;
 	}
 
 	/**
 	 * @param location the location to set
 	 */
-	public void setLocation(Location location) {
+	public void setLocation(ApiLocation location) {
 		this.location = location;
 	}
 	

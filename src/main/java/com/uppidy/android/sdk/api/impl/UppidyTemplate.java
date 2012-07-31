@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api.impl;
+package com.uppidy.android.sdk.api.impl;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -26,11 +26,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
-import com.uppidy.android.sdk.social.api.BackupOperations;
-import com.uppidy.android.sdk.social.api.FeedOperations;
-import com.uppidy.android.sdk.social.api.Uppidy;
-import com.uppidy.android.sdk.social.api.UppidyApi;
-import com.uppidy.android.sdk.social.api.UserOperations;
+import com.uppidy.android.sdk.api.BackupOperations;
+import com.uppidy.android.sdk.api.FeedOperations;
+import com.uppidy.android.sdk.api.Uppidy;
+import com.uppidy.android.sdk.api.UppidyApi;
+import com.uppidy.android.sdk.api.UserOperations;
 
 /**
  * <p>This is the central class for interacting with Uppidy.</p>

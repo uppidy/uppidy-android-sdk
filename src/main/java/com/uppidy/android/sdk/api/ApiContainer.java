@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 
 /**
@@ -8,10 +8,10 @@ package com.uppidy.android.sdk.social.api;
  * 
  * @author arudnev@uppidy.com
  */
-public class Container extends Extensible {
+public class ApiContainer extends ApiExtensible {
 	private String id;
 	private String description;
-	private ContactInfo owner; 
+	private ApiContactInfo owner; 
 	
 	public String getId() {
 		return id;
@@ -29,11 +29,11 @@ public class Container extends Extensible {
 		this.description = description;
 	}
 	
-	public ContactInfo getOwner() {
+	public ApiContactInfo getOwner() {
 		return owner;
 	}
 	
-	public void setOwner(ContactInfo owner) {
+	public void setOwner(ApiContactInfo owner) {
 		this.owner = owner;
 	}
 	
@@ -49,11 +49,11 @@ public class Container extends Extensible {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || !(obj instanceof Container)) {
+		if (obj == null || !(obj instanceof ApiContainer)) {
 			return false;
 		}
 		
-		Container other = (Container) obj;
+		ApiContainer other = (ApiContainer) obj;
 		if (id == null || other.id == null) {
 			return false;						
 		}

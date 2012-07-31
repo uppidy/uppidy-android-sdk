@@ -1,9 +1,9 @@
-package com.uppidy.android.sdk.social.connect;
+package com.uppidy.android.sdk.connect;
 
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 
-import com.uppidy.android.sdk.social.api.Uppidy;
-import com.uppidy.android.sdk.social.api.impl.UppidyTemplate;
+import com.uppidy.android.sdk.api.Uppidy;
+import com.uppidy.android.sdk.api.impl.UppidyTemplate;
 
 /**
  * Uppidy ServiceProvider implementation.

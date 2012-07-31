@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  * 
  * @author arudnev@uppidy.com
  */
-public class Profile extends Extensible {
+public class ApiProfile extends ApiExtensible {
 
 	private Date createdTime;
 

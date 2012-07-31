@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api.impl;
+package com.uppidy.android.sdk.api.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,10 +9,10 @@ import org.springframework.social.facebook.api.ImageType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.uppidy.android.sdk.social.api.ContactInfo;
-import com.uppidy.android.sdk.social.api.Profile;
-import com.uppidy.android.sdk.social.api.UppidyApi;
-import com.uppidy.android.sdk.social.api.UserOperations;
+import com.uppidy.android.sdk.api.ApiContactInfo;
+import com.uppidy.android.sdk.api.ApiProfile;
+import com.uppidy.android.sdk.api.UppidyApi;
+import com.uppidy.android.sdk.api.UserOperations;
 
 class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 
@@ -23,13 +23,13 @@ class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 		this.uppidyApi = uppidyApi;
 	}
 
-	public Profile getUserProfile() {
+	public ApiProfile getUserProfile() {
 		requireAuthorization();
 		return getUserProfile("me");
 	}
 
-	public Profile getUserProfile(String userId) {
-		return uppidyApi.fetchObject(userId + "/profile", Profile.class);
+	public ApiProfile getUserProfile(String userId) {
+		return uppidyApi.fetchObject(userId + "/profile", ApiProfile.class);
 	}
 	
 	public byte[] getUserProfileImage() {
@@ -55,11 +55,11 @@ class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 		return deserializePermissionsNodeToList(responseNode);
 	}
 
-	public List<ContactInfo> search(String query) {
+	public List<ApiContactInfo> search(String query) {
 		requireAuthorization();
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
 		queryParams.add("query", query);
-		return uppidyApi.fetchConnections("search", "user", ContactInfo.class, queryParams);
+		return uppidyApi.fetchConnections("search", "user", ApiContactInfo.class, queryParams);
 	}
 
 	private List<String> deserializePermissionsNodeToList(JsonNode jsonNode) {

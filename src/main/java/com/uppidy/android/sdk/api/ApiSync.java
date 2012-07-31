@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  * 
  * @author arudnev@uppidy.com
  */
-public class Sync extends Extensible {
+public class ApiSync extends ApiExtensible {
 
 	private String clientVersion;
-	private List<Message> messages;
-	private List<Conversation> conversations;
-	private List<Contact> contacts;
-	private Location location;
+	private List<ApiMessage> messages;
+	private List<ApiConversation> conversations;
+	private List<ApiContact> contacts;
+	private ApiLocation location;
 
 	public String getClientVersion() {
 		return clientVersion;
@@ -25,41 +25,41 @@ public class Sync extends Extensible {
 		this.clientVersion = clientVersion;
 	}
 
-	public List<Message> getMessages() {
+	public List<ApiMessage> getMessages() {
 		return messages;
 	}
 
-	public List<Contact> getContacts() {
+	public List<ApiContact> getContacts() {
 		return contacts;
 	}
 
-	public List<Conversation> getConversations() {
+	public List<ApiConversation> getConversations() {
 		return conversations;
 	}
 
-	public void setMessages(List<Message> messages) {
+	public void setMessages(List<ApiMessage> messages) {
 		this.messages = messages;
 	}
 
-	public void setContacts(List<Contact> contacts) {
+	public void setContacts(List<ApiContact> contacts) {
 		this.contacts = contacts;
 	}
 
-	public void setConversations(List<Conversation> conversations) {
+	public void setConversations(List<ApiConversation> conversations) {
 		this.conversations = conversations;
 	}
 	
 	/**
 	 * @return the location
 	 */
-	public Location getLocation() {
+	public ApiLocation getLocation() {
 		return location;
 	}
 
 	/**
 	 * @param location the location to set
 	 */
-	public void setLocation(Location location) {
+	public void setLocation(ApiLocation location) {
 		this.location = location;
 	}
 }

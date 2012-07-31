@@ -1,13 +1,13 @@
-package com.uppidy.android.sdk.social.api.impl;
+package com.uppidy.android.sdk.api.impl;
 
 import java.util.List;
 
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.uppidy.android.sdk.social.api.FeedOperations;
-import com.uppidy.android.sdk.social.api.Message;
-import com.uppidy.android.sdk.social.api.UppidyApi;
+import com.uppidy.android.sdk.api.FeedOperations;
+import com.uppidy.android.sdk.api.ApiMessage;
+import com.uppidy.android.sdk.api.UppidyApi;
 
 class FeedTemplate extends AbstractUppidyOperations implements FeedOperations {
 
@@ -18,52 +18,52 @@ class FeedTemplate extends AbstractUppidyOperations implements FeedOperations {
 		this.uppidyApi = uppidyApi;
 	}
 
-	public List<Message> getFeed() {
+	public List<ApiMessage> getFeed() {
 		return getFeed("me", 0, 25);
 	}
 
-	public List<Message> getFeed(int offset, int limit) {
+	public List<ApiMessage> getFeed(int offset, int limit) {
 		return getFeed("me", offset, limit);
 	}
 
-	public List<Message> getFeed(String ownerId) {
+	public List<ApiMessage> getFeed(String ownerId) {
 		return getFeed(ownerId, 0, 25);
 	}
 		
-	public List<Message> getFeed(String ownerId, int offset, int limit) {
+	public List<ApiMessage> getFeed(String ownerId, int offset, int limit) {
 		requireAuthorization();
 		return fetchConnectionList("me", "feed", null, offset, limit);
 	}
 
-	public List<Message> getHomeFeed() {
+	public List<ApiMessage> getHomeFeed() {
 		return getHomeFeed(0, 25);
 	}
 	
-	public java.util.List<Message> getHomeFeed(int offset, int limit) {
+	public java.util.List<ApiMessage> getHomeFeed(int offset, int limit) {
 		requireAuthorization();
 		return fetchConnectionList("me", "home", null, offset, limit);
 	}
 
-	public List<Message> getPosts() {
+	public List<ApiMessage> getPosts() {
 		return getPosts("me", 0, 25);
 	}
 
-	public List<Message> getPosts(int offset, int limit) {
+	public List<ApiMessage> getPosts(int offset, int limit) {
 		return getPosts("me", offset, limit);
 	}
 
-	public List<Message> getPosts(String ownerId) {
+	public List<ApiMessage> getPosts(String ownerId) {
 		return getPosts(ownerId, 0, 25);
 	}
 	
-	public List<Message> getPosts(String ownerId, int offset, int limit) {
+	public List<ApiMessage> getPosts(String ownerId, int offset, int limit) {
 		requireAuthorization();
 		return fetchConnectionList(ownerId, "posts", null, offset, limit);
 	}
 	
-	public Message getPost(String entryId) {
+	public ApiMessage getPost(String entryId) {
 		requireAuthorization();
-		return uppidyApi.fetchObject(entryId, Message.class);
+		return uppidyApi.fetchObject(entryId, ApiMessage.class);
 	}
 
 	public String updateStatus(String message) {
@@ -82,48 +82,48 @@ class FeedTemplate extends AbstractUppidyOperations implements FeedOperations {
 		uppidyApi.delete(id);
 	}
 
-	public List<Message> searchPublicFeed(String query) {
+	public List<ApiMessage> searchPublicFeed(String query) {
 		return searchPublicFeed(query, 0, 25);
 	}
 	
-	public List<Message> searchPublicFeed(String query, int offset, int limit) {
+	public List<ApiMessage> searchPublicFeed(String query, int offset, int limit) {
 		return fetchConnectionList("all", "posts", query, offset, limit);
 	}
 	
-	public List<Message> searchHomeFeed(String query) {
+	public List<ApiMessage> searchHomeFeed(String query) {
 		return searchHomeFeed(query, 0, 25);
 	}
 	
-	public List<Message> searchHomeFeed(String query, int offset, int limit) {
+	public List<ApiMessage> searchHomeFeed(String query, int offset, int limit) {
 		requireAuthorization();
 		return fetchConnectionList("me", "home", query, offset, limit);
 	}
 	
-	public List<Message> searchUserFeed(String query) {
+	public List<ApiMessage> searchUserFeed(String query) {
 		return searchUserFeed("me", query, 0, 25);
 	}
 
-	public List<Message> searchUserFeed(String query, int offset, int limit) {
+	public List<ApiMessage> searchUserFeed(String query, int offset, int limit) {
 		return searchUserFeed("me", query, offset, limit);
 	}
 
-	public List<Message> searchUserFeed(String userId, String query) {
+	public List<ApiMessage> searchUserFeed(String userId, String query) {
 		return searchUserFeed(userId, query, 0, 25);
 	}
 	
-	public List<Message> searchUserFeed(String userId, String query, int offset, int limit) {
+	public List<ApiMessage> searchUserFeed(String userId, String query, int offset, int limit) {
 		requireAuthorization();
 		return fetchConnectionList(userId, "feed", query, offset, limit);
 	}
 	
 	// private helpers
 	
-	private List<Message> fetchConnectionList(String objectId, String connectionName, String query, int offset, int limit) {
+	private List<ApiMessage> fetchConnectionList(String objectId, String connectionName, String query, int offset, int limit) {
 		MultiValueMap<String, String> queryParameters = new LinkedMultiValueMap<String, String>();
 		if(query != null && query.trim().length() > 0) queryParameters.set("query", query);
 		if(offset > 0)	queryParameters.set("offset", String.valueOf(offset));
 		if(limit > 0) queryParameters.set("limit", String.valueOf(limit));
-		return uppidyApi.fetchConnections(objectId, connectionName, Message.class, queryParameters);
+		return uppidyApi.fetchConnections(objectId, connectionName, ApiMessage.class, queryParameters);
 	}
 
 }

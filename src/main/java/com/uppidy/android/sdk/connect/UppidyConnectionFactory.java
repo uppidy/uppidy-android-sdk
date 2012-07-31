@@ -1,8 +1,8 @@
-package com.uppidy.android.sdk.social.connect;
+package com.uppidy.android.sdk.connect;
 
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 
-import com.uppidy.android.sdk.social.api.Uppidy;
+import com.uppidy.android.sdk.api.Uppidy;
 
 /**
  * Uppidy ConnectionFactory implementation.

@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import org.springframework.social.ApiBinding;
 import org.springframework.web.client.RestOperations;

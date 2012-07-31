@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api.impl;
+package com.uppidy.android.sdk.api.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import com.uppidy.util.StringUtil;
 
@@ -9,7 +9,7 @@ import com.uppidy.util.StringUtil;
  * 
  * @author arudnev@uppidy.com
  */
-public class ContactInfo {
+public class ApiContactInfo {
 
 	private String address;
 	private String name;
@@ -47,11 +47,11 @@ public class ContactInfo {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || !(obj instanceof ContactInfo)) {
+		if (obj == null || !(obj instanceof ApiContactInfo)) {
 			return false;
 		}
 		
-		ContactInfo other = (ContactInfo) obj;
+		ApiContactInfo other = (ApiContactInfo) obj;
 		if (address == null || other.address == null) {
 			return false;						
 		}

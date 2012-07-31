@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 /**
  * Location of a message, event, etc.
@@ -7,7 +7,7 @@ package com.uppidy.android.sdk.social.api;
  * 
  * @author arudnev@uppidy.com
  */
-public class Location {
+public class ApiLocation {
 
 	private double latitude;
 	private double longitude;
@@ -45,8 +45,8 @@ public class Location {
 		if (this == obj) {
 			return true;
 		}
-		if(obj != null && obj instanceof Location) {
-			Location other = (Location) obj;
+		if(obj != null && obj instanceof ApiLocation) {
+			ApiLocation other = (ApiLocation) obj;
 			return other.latitude == latitude && other.longitude == longitude;
 		}
 		return false;

@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api.impl;
+package com.uppidy.android.sdk.api.impl;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,13 +8,13 @@ import java.util.Map;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.uppidy.android.sdk.social.api.BackupOperations;
-import com.uppidy.android.sdk.social.api.Contact;
-import com.uppidy.android.sdk.social.api.Container;
-import com.uppidy.android.sdk.social.api.Conversation;
-import com.uppidy.android.sdk.social.api.Message;
-import com.uppidy.android.sdk.social.api.Sync;
-import com.uppidy.android.sdk.social.api.UppidyApi;
+import com.uppidy.android.sdk.api.BackupOperations;
+import com.uppidy.android.sdk.api.ApiContact;
+import com.uppidy.android.sdk.api.ApiContainer;
+import com.uppidy.android.sdk.api.ApiConversation;
+import com.uppidy.android.sdk.api.ApiMessage;
+import com.uppidy.android.sdk.api.ApiSync;
+import com.uppidy.android.sdk.api.UppidyApi;
 
 // TODO (AR): add missing implementations
 class BackupTemplate extends AbstractUppidyOperations implements BackupOperations {
@@ -27,21 +27,21 @@ class BackupTemplate extends AbstractUppidyOperations implements BackupOperation
 	}
 
 	@Override
-	public List<Container> listContainers(Map<String, String> queryParams) {
+	public List<ApiContainer> listContainers(Map<String, String> queryParams) {
 		requireAuthorization();
-		return uppidyApi.fetchConnections("me", "containers", Container.class, toMultiValueMap(queryParams));
+		return uppidyApi.fetchConnections("me", "containers", ApiContainer.class, toMultiValueMap(queryParams));
 	}
 
 	@Override
-	public Container createContainer(Map<String, Object> parameters) {
+	public ApiContainer createContainer(Map<String, Object> parameters) {
 		requireAuthorization();
-		return uppidyApi.publish("me", "containers", Container.class, parameters);
+		return uppidyApi.publish("me", "containers", ApiContainer.class, parameters);
 	}
 
 	@Override
-	public Container updateContainer(String containerId, Map<String, Object> parameters) {
+	public ApiContainer updateContainer(String containerId, Map<String, Object> parameters) {
 		requireAuthorization();
-		return uppidyApi.publish("me/containers/" + containerId, "data", Container.class, parameters);
+		return uppidyApi.publish("me/containers/" + containerId, "data", ApiContainer.class, parameters);
 	}
 
 	@Override
@@ -51,29 +51,29 @@ class BackupTemplate extends AbstractUppidyOperations implements BackupOperation
 	}
 
 	@Override
-	public void sync(String containerId, Sync data) {
+	public void sync(String containerId, ApiSync data) {
 		requireAuthorization();
 		uppidyApi.post("me/containers/" + containerId, "sync", data);
 	}
 	
 	@Override
-	public List<Contact> listContacts(String containerId, Map<String, String> queryParams) {
+	public List<ApiContact> listContacts(String containerId, Map<String, String> queryParams) {
 		requireAuthorization();
-		return uppidyApi.fetchConnections("me/containers/" + containerId, "contacts", Contact.class, toMultiValueMap(queryParams));
+		return uppidyApi.fetchConnections("me/containers/" + containerId, "contacts", ApiContact.class, toMultiValueMap(queryParams));
 	}
 
 	@Override
-	public List<Message> listMessages(String containerId, Map<String, String> queryParams) {
+	public List<ApiMessage> listMessages(String containerId, Map<String, String> queryParams) {
 		requireAuthorization();
-		return uppidyApi.fetchConnections("me/containers/" + containerId, "messages", Message.class, toMultiValueMap(queryParams));
+		return uppidyApi.fetchConnections("me/containers/" + containerId, "messages", ApiMessage.class, toMultiValueMap(queryParams));
 	}
 
 	@Override
-	public List<Conversation> listConversations(String containerId, Map<String, String> queryParams) {
+	public List<ApiConversation> listConversations(String containerId, Map<String, String> queryParams) {
 		requireAuthorization();
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 		params.setAll(queryParams);
-		return uppidyApi.fetchConnections("me/containers/" + containerId, "conversations", Conversation.class, params);
+		return uppidyApi.fetchConnections("me/containers/" + containerId, "conversations", ApiConversation.class, params);
 	}
 
 	private Date getSyncDate(String containerId, String type) {

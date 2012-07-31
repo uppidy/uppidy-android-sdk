@@ -18,11 +18,11 @@ import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.uppidy.android.sdk.social.api.BackupOperations;
-import com.uppidy.android.sdk.social.api.ContactInfo;
-import com.uppidy.android.sdk.social.api.Message;
-import com.uppidy.android.sdk.social.api.Sync;
-import com.uppidy.android.sdk.social.api.Uppidy;
+import com.uppidy.android.sdk.api.BackupOperations;
+import com.uppidy.android.sdk.api.ApiContactInfo;
+import com.uppidy.android.sdk.api.ApiMessage;
+import com.uppidy.android.sdk.api.ApiSync;
+import com.uppidy.android.sdk.api.Uppidy;
 
 import de.akquinet.android.androlog.Log;
 
@@ -172,7 +172,7 @@ public abstract class BackupService extends IntentService
 	private boolean doBackup( MessageProvider mp )
 	{
 		if( mp == null || !isOnline() ) return false;
-		List<Message> messages = mp.getNextSyncBundle();
+		List<ApiMessage> messages = mp.getNextSyncBundle();
 		if( messages == null || messages.size() == 0 ) return false;
 		
 		Uppidy uppidy = getUppidyConnectionRepository().findPrimaryConnection(Uppidy.class).getApi();
@@ -182,14 +182,14 @@ public abstract class BackupService extends IntentService
 			return false;
 		}
 		List<String> addresses = new ArrayList<String>();
-		for( Message m : messages ) 
+		for( ApiMessage m : messages ) 
 		{
 			addresses.add( m.getFrom().getAddress() );
-			for( ContactInfo toRef : m.getTo() ) addresses.add( toRef.getAddress() );
+			for( ApiContactInfo toRef : m.getTo() ) addresses.add( toRef.getAddress() );
 		}
 		BackupOperations backupOperations = uppidy.backupOperations();
 		
-		Sync sync = new Sync();
+		ApiSync sync = new ApiSync();
 		sync.setContacts(mp.getContacts(addresses));
 		sync.setMessages(messages);
 		backupOperations.sync( mp.getContainerId(), sync );

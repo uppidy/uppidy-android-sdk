@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.connect;
+package com.uppidy.android.sdk.connect;
 
 import org.springframework.social.ApiException;
 import org.springframework.social.connect.ApiAdapter;
@@ -6,8 +6,8 @@ import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UserProfileBuilder;
 
-import com.uppidy.android.sdk.social.api.Profile;
-import com.uppidy.android.sdk.social.api.Uppidy;
+import com.uppidy.android.sdk.api.ApiProfile;
+import com.uppidy.android.sdk.api.Uppidy;
 
 /**
  * Uppidy ApiAdapter implementation.
@@ -26,7 +26,7 @@ public class UppidyAdapter implements ApiAdapter<Uppidy> {
 	}
 
 	public void setConnectionValues(Uppidy uppidy, ConnectionValues values) {
-		Profile profile = uppidy.userOperations().getUserProfile();
+		ApiProfile profile = uppidy.userOperations().getUserProfile();
 		values.setProviderUserId(profile.getId());
 		values.setDisplayName(profile.getUsername());
 		values.setProfileUrl(uppidy.getBaseUrl() + profile.getId() + "/profile");
@@ -34,7 +34,7 @@ public class UppidyAdapter implements ApiAdapter<Uppidy> {
 	}
 
 	public UserProfile fetchUserProfile(Uppidy uppidy) {
-		Profile profile = uppidy.userOperations().getUserProfile();
+		ApiProfile profile = uppidy.userOperations().getUserProfile();
 		return new UserProfileBuilder().setName(profile.getName()).setEmail(profile.getEmail()).setUsername(profile.getUsername()).build();
 	}
 	

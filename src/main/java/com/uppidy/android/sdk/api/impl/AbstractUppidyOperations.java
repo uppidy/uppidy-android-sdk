@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api.impl;
+package com.uppidy.android.sdk.api.impl;
 
 import org.springframework.social.MissingAuthorizationException;
 

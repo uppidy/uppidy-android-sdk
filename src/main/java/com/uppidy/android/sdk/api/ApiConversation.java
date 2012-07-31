@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.List;
 
@@ -9,16 +9,16 @@ import java.util.List;
  * 
  * @author arudnev@uppidy.com
  */
-public class Conversation extends Extensible {
+public class ApiConversation extends ApiExtensible {
 	private String id;
 	private String name;
-	private List<ContactInfo> members;
+	private List<ApiContactInfo> members;
 	
-	public List<ContactInfo> getMembers() {
+	public List<ApiContactInfo> getMembers() {
 		return members;
 	}
 
-	public void setMembers(List<ContactInfo> members) {
+	public void setMembers(List<ApiContactInfo> members) {
 		this.members = members;
 	}
 
@@ -52,11 +52,11 @@ public class Conversation extends Extensible {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || !(obj instanceof Conversation)) {
+		if (obj == null || !(obj instanceof ApiConversation)) {
 			return false;
 		}
 		
-		Conversation other = (Conversation) obj;
+		ApiConversation other = (ApiConversation) obj;
 		if (id == null || other.id == null) {
 			return false;						
 		}

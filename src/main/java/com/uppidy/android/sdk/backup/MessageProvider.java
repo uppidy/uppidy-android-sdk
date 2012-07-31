@@ -5,8 +5,8 @@ package com.uppidy.android.sdk.backup;
 
 import java.util.List;
 
-import com.uppidy.android.sdk.social.api.Contact;
-import com.uppidy.android.sdk.social.api.Message;
+import com.uppidy.android.sdk.api.ApiContact;
+import com.uppidy.android.sdk.api.ApiMessage;
 
 /**
  * @author Vyacheslav Mukhortov
@@ -20,14 +20,14 @@ public interface MessageProvider
 	 * It seems a good idea to return a limited number of messages, especially MMS.
 	 * @return - the list of {@code Message}s to be backed up
 	 */
-	public List<Message> getNextSyncBundle();
+	public List<ApiMessage> getNextSyncBundle();
 	
 	/**
-	 * Returns the list of contacts by their addresses extracted from the list of {@link Message}s
+	 * Returns the list of contacts by their addresses extracted from the list of {@link ApiMessage}s
 	 * @param addresses
 	 * @return list of {@code Contact}s to be backed up
 	 */
-	public List<Contact> getContacts( List<String> addresses );
+	public List<ApiContact> getContacts( List<String> addresses );
 	
 	/**
 	 * Must return the container id used by Uppidy server to keep messages of the type provided by this {@link MessageProvider}.
@@ -41,5 +41,5 @@ public interface MessageProvider
 	 * do not return those messages on subsequent {@code getNextSyncBundle()} calls. 
 	 * @param posts - messages being backed up
 	 */
-	public void backupDone( List<Message> messages );	
+	public void backupDone( List<ApiMessage> messages );	
 }

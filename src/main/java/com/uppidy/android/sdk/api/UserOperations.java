@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface UserOperations {
 	 * @throws ApiException if there is an error while communicating with Uppidy.
 	 * @throws MissingAuthorizationException if UppidyTemplate was not created with an access token.
 	 */
-	Profile getUserProfile();
+	ApiProfile getUserProfile();
 	
 	/**
 	 * Retrieves the profile for the specified user.
@@ -26,7 +26,7 @@ public interface UserOperations {
 	 * @return the user's profile information.
 	 * @throws ApiException if there is an error while communicating with Uppidy.
 	 */
-	Profile getUserProfile(String userId);
+	ApiProfile getUserProfile(String userId);
 
 	/**
 	 * Retrieves a list of permissions that the application has been granted for the authenticated user.
@@ -39,9 +39,9 @@ public interface UserOperations {
 	/**
 	 * Searches for users.
 	 * @param query the search query (e.g., "Michael Scott")
-	 * @return a list of {@link ContactInfo}s, each representing a user who matched the given query.
+	 * @return a list of {@link ApiContactInfo}s, each representing a user who matched the given query.
 	 * @throws ApiException if there is an error while communicating with Uppidy.
 	 * @throws MissingAuthorizationException if UppidyTemplate was not created with an access token.
 	 */
-	List<ContactInfo> search(String query);
+	List<ApiContactInfo> search(String query);
 }

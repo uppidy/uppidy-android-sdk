@@ -1,4 +1,4 @@
-package com.uppidy.android.sdk.social.api;
+package com.uppidy.android.sdk.api;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Map;
  * 
  * @author arudnev@uppidy.com
  */
-public class Contact extends Extensible {
+public class ApiContact extends ApiExtensible {
 
 	private String id;	
 	private String name;
@@ -52,11 +52,11 @@ public class Contact extends Extensible {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || !(obj instanceof Contact)) {
+		if (obj == null || !(obj instanceof ApiContact)) {
 			return false;
 		}
 		
-		Contact other = (Contact) obj;
+		ApiContact other = (ApiContact) obj;
 		if (addressByType == null || other.addressByType == null) {
 			return false;						
 		}
