@@ -9,7 +9,7 @@ import java.util.Date;
  * 
  * @author arudnev@uppidy.com
  */
-public class Profile {
+public class Profile extends Extensible {
 
 	private Date createdTime;
 
@@ -111,8 +111,8 @@ public class Profile {
 		this.verified = verified;
 	}
 	
-	public Reference createReference() {
-		Reference result = new Reference();
+	public AppInfo createReference() {
+		AppInfo result = new AppInfo();
 		result.setId(getId());
 		result.setName(getName());
 		return result;

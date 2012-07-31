@@ -11,16 +11,16 @@ import com.uppidy.util.StringUtil;
  * 
  * @author arudnev@uppidy.com
  */
-public class Conversation {
+public class Conversation extends Extensible {
 	private String id;
 	private String name;
-	private List<Reference> members;
+	private List<AppInfo> members;
 	
-	public List<Reference> getMembers() {
+	public List<AppInfo> getMembers() {
 		return members;
 	}
 
-	public void setMembers(List<Reference> members) {
+	public void setMembers(List<AppInfo> members) {
 		this.members = members;
 	}
 
@@ -69,8 +69,8 @@ public class Conversation {
 		return "{ \"name\":" + StringUtil.quote(name) + ", \"id\":\"" + id + "\" }";
 	}
 	
-	public Reference createReference() {
-		Reference result = new Reference();
+	public AppInfo createReference() {
+		AppInfo result = new AppInfo();
 		result.setId(getId());
 		result.setName(getName());
 		return result;

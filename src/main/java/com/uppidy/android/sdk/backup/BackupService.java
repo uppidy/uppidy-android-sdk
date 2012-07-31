@@ -19,8 +19,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.uppidy.android.sdk.social.api.BackupOperations;
+import com.uppidy.android.sdk.social.api.ContactInfo;
 import com.uppidy.android.sdk.social.api.Message;
-import com.uppidy.android.sdk.social.api.Reference;
 import com.uppidy.android.sdk.social.api.Sync;
 import com.uppidy.android.sdk.social.api.Uppidy;
 
@@ -181,16 +181,16 @@ public abstract class BackupService extends IntentService
 			Log.e( TAG, "Uppidy connection not found" );
 			return false;
 		}
-		List<String> messageIds = new ArrayList<String>();
+		List<String> addresses = new ArrayList<String>();
 		for( Message m : messages ) 
 		{
-			messageIds.add( m.getFrom().getId() );
-			for( Reference toRef : m.getTo() ) messageIds.add( toRef.getId() );
+			addresses.add( m.getFrom().getAddress() );
+			for( ContactInfo toRef : m.getTo() ) addresses.add( toRef.getAddress() );
 		}
 		BackupOperations backupOperations = uppidy.backupOperations();
 		
 		Sync sync = new Sync();
-		sync.setContacts(mp.getContacts(messageIds));
+		sync.setContacts(mp.getContacts(addresses));
 		sync.setMessages(messages);
 		backupOperations.sync( mp.getContainerId(), sync );
 		

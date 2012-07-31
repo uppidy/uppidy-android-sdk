@@ -10,7 +10,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.uppidy.android.sdk.social.api.Profile;
-import com.uppidy.android.sdk.social.api.Reference;
+import com.uppidy.android.sdk.social.api.AppInfo;
 import com.uppidy.android.sdk.social.api.UppidyApi;
 import com.uppidy.android.sdk.social.api.UserOperations;
 
@@ -55,11 +55,11 @@ class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 		return deserializePermissionsNodeToList(responseNode);
 	}
 
-	public List<Reference> search(String query) {
+	public List<AppInfo> search(String query) {
 		requireAuthorization();
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
 		queryParams.add("query", query);
-		return uppidyApi.fetchConnections("search", "user", Reference.class, queryParams);
+		return uppidyApi.fetchConnections("search", "user", AppInfo.class, queryParams);
 	}
 
 	private List<String> deserializePermissionsNodeToList(JsonNode jsonNode) {

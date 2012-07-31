@@ -1,6 +1,5 @@
 package com.uppidy.android.sdk.social.api;
 
-import com.uppidy.util.StringUtil;
 
 /**
  * Backup container, i.e. container for backup of SMS / MMS messages from specific device
@@ -9,10 +8,10 @@ import com.uppidy.util.StringUtil;
  * 
  * @author arudnev@uppidy.com
  */
-public class Container {
+public class Container extends Extensible {
 	private String id;
 	private String description;
-	private Contact owner; 
+	private ContactInfo owner; 
 	
 	public String getId() {
 		return id;
@@ -30,11 +29,11 @@ public class Container {
 		this.description = description;
 	}
 	
-	public Contact getOwner() {
+	public ContactInfo getOwner() {
 		return owner;
 	}
 	
-	public void setOwner(Contact owner) {
+	public void setOwner(ContactInfo owner) {
 		this.owner = owner;
 	}
 	
@@ -59,10 +58,6 @@ public class Container {
 			return false;						
 		}
 		return id.equals(other.id);
-	}
-	
-	public String toString() {
-		return "{ \"description\":" + StringUtil.quote(description) + ", \"id\":\"" + id + "\" }";
 	}
 	
 }

@@ -14,9 +14,9 @@ public class Message {
 	
 	private String id;
 	
-	private Reference from;
+	private ContactInfo from;
 
-	private List<Reference> to;
+	private List<ContactInfo> to;
 
 	private String text;
 	
@@ -28,11 +28,13 @@ public class Message {
 
 	private Date updatedTime;
 	
+	private Location location;
+	
 	public Date getCreatedTime() {
 		return createdTime;
 	}
 
-	public Reference getFrom() {
+	public ContactInfo getFrom() {
 		return from;
 	}
 
@@ -52,7 +54,7 @@ public class Message {
 		return sentTime;
 	}
 
-	public List<Reference> getTo() {
+	public List<ContactInfo> getTo() {
 		return to;
 	}
 
@@ -64,7 +66,7 @@ public class Message {
 		this.createdTime = createdTime;
 	}
 
-	public void setFrom(Reference from) {
+	public void setFrom(ContactInfo from) {
 		this.from = from;
 	}
 
@@ -84,11 +86,26 @@ public class Message {
 		this.sentTime = sentTime;
 	}
 
-	public void setTo(List<Reference> to) {
+	public void setTo(List<ContactInfo> to) {
 		this.to = to;
 	}
 
 	public void setUpdatedTime(Date updatedTime) {
 		this.updatedTime = updatedTime;
 	}
+
+	/**
+	 * @return the location
+	 */
+	public Location getLocation() {
+		return location;
+	}
+
+	/**
+	 * @param location the location to set
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+	
 }

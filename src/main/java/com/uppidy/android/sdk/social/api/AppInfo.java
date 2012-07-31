@@ -1,16 +1,15 @@
 package com.uppidy.android.sdk.social.api;
 
 /**
- * A simple reference to another Uppidy object without the complete set of object data.
+ * A reference to an application.
  * 
  * Part of the Uppidy Web Services API
  * 
  * @author arudnev@uppidy.com
  */
-public class Reference {
+public class AppInfo {
 
 	private String id;
-
 	private String name;
 
 	public String getId() {

@@ -23,11 +23,11 @@ public interface MessageProvider
 	public List<Message> getNextSyncBundle();
 	
 	/**
-	 * Returns the list of contacts by contact IDs, extracted from the list of {@link Message}s
-	 * @param ids
-	 * @return
+	 * Returns the list of contacts by their addresses extracted from the list of {@link Message}s
+	 * @param addresses
+	 * @return list of {@code Contact}s to be backed up
 	 */
-	public List<Contact> getContacts( List<String> ids );
+	public List<Contact> getContacts( List<String> addresses );
 	
 	/**
 	 * Must return the container id used by Uppidy server to keep messages of the type provided by this {@link MessageProvider}.

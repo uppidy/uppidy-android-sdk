@@ -36,9 +36,9 @@ public interface UserOperations {
 	/**
 	 * Searches for users.
 	 * @param query the search query (e.g., "Michael Scott")
-	 * @return a list of {@link Reference}s, each representing a user who matched the given query.
+	 * @return a list of {@link AppInfo}s, each representing a user who matched the given query.
 	 * @throws ApiException if there is an error while communicating with Uppidy.
 	 * @throws MissingAuthorizationException if UppidyTemplate was not created with an access token.
 	 */
-	List<Reference> search(String query);
+	List<AppInfo> search(String query);
 }

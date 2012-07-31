@@ -1,44 +1,49 @@
 package com.uppidy.android.sdk.social.api;
 
-import com.uppidy.util.StringUtil;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Contact in the address book
+ * Reference to a contact
  * 
  * Part of the Uppidy Web Services API
  * 
  * @author arudnev@uppidy.com
  */
-public class Contact {
+public class Contact extends Extensible {
 
-	private String address;
+	private String id;	
 	private String name;
+	private Map<String, List<String>> addressByType;
 	
+	public String getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}
 	
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 	
-	public String getAddress() {
-		return address;
+	public Map<String, List<String>> getAddressByType() {
+		return addressByType;
 	}
 	
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	@Override
-	public String toString() {
-		return "{ \"name\":" + StringUtil.quote(name) + ", \"address\":\"" + address + "\" }";
+	public void setAddressByType(Map<String, List<String>> addressByType) {
+		this.addressByType = addressByType;
 	}
 	
 	@Override
 	public int hashCode() {
 		int result = 1;
-		result = 31 * result + ((address == null) ? 0 : address.hashCode());
+		result = 31 * result + ((addressByType == null) ? 0 : addressByType.hashCode());
 		return result;
 	}
 	
@@ -52,17 +57,10 @@ public class Contact {
 		}
 		
 		Contact other = (Contact) obj;
-		if (address == null || other.address == null) {
+		if (addressByType == null || other.addressByType == null) {
 			return false;						
 		}
-		return address.equals(other.address);
-	}
-	
-	public Reference createReference() {
-		Reference result = new Reference();
-		result.setId(getAddress());
-		result.setName(getName());
-		return result;
+		return addressByType.equals(other.addressByType);
 	}
 	
 }
