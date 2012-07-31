@@ -1,4 +1,4 @@
-package com.uppidy.util;
+package com.uppidy.android.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;

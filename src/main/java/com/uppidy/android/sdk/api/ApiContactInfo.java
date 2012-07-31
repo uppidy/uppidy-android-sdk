@@ -1,6 +1,6 @@
 package com.uppidy.android.sdk.api;
 
-import com.uppidy.util.StringUtil;
+import com.uppidy.android.util.StringUtil;
 
 /**
  * Reference to a contact
