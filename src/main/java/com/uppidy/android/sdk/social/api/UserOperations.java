@@ -2,6 +2,9 @@ package com.uppidy.android.sdk.social.api;
 
 import java.util.List;
 
+import org.springframework.social.ApiException;
+import org.springframework.social.MissingAuthorizationException;
+
 /**
  * Interface defining operations that can be performed on a Uppidy user profiles.
  * 
@@ -36,9 +39,9 @@ public interface UserOperations {
 	/**
 	 * Searches for users.
 	 * @param query the search query (e.g., "Michael Scott")
-	 * @return a list of {@link AppInfo}s, each representing a user who matched the given query.
+	 * @return a list of {@link ContactInfo}s, each representing a user who matched the given query.
 	 * @throws ApiException if there is an error while communicating with Uppidy.
 	 * @throws MissingAuthorizationException if UppidyTemplate was not created with an access token.
 	 */
-	List<AppInfo> search(String query);
+	List<ContactInfo> search(String query);
 }

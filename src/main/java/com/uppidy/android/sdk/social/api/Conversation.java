@@ -2,8 +2,6 @@ package com.uppidy.android.sdk.social.api;
 
 import java.util.List;
 
-import com.uppidy.util.StringUtil;
-
 /**
  * Conversation, i.e. list of SMS / MMS messages with specific contact or iMessage group chat
  * 
@@ -14,13 +12,13 @@ import com.uppidy.util.StringUtil;
 public class Conversation extends Extensible {
 	private String id;
 	private String name;
-	private List<AppInfo> members;
+	private List<ContactInfo> members;
 	
-	public List<AppInfo> getMembers() {
+	public List<ContactInfo> getMembers() {
 		return members;
 	}
 
-	public void setMembers(List<AppInfo> members) {
+	public void setMembers(List<ContactInfo> members) {
 		this.members = members;
 	}
 
@@ -64,17 +62,5 @@ public class Conversation extends Extensible {
 		}
 		return id.equals(other.id);
 	}
-	
-	public String toString() {
-		return "{ \"name\":" + StringUtil.quote(name) + ", \"id\":\"" + id + "\" }";
-	}
-	
-	public AppInfo createReference() {
-		AppInfo result = new AppInfo();
-		result.setId(getId());
-		result.setName(getName());
-		return result;
-	}
-
-	
+		
 }

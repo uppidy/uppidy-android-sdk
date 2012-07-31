@@ -56,13 +56,5 @@ public class ContactInfo {
 			return false;						
 		}
 		return address.equals(other.address);
-	}
-	
-	public AppInfo createReference() {
-		AppInfo result = new AppInfo();
-		result.setId(getAddress());
-		result.setName(getName());
-		return result;
-	}
-	
+	}	
 }

@@ -110,12 +110,4 @@ public class Profile extends Extensible {
 	public void setVerified(Boolean verified) {
 		this.verified = verified;
 	}
-	
-	public AppInfo createReference() {
-		AppInfo result = new AppInfo();
-		result.setId(getId());
-		result.setName(getName());
-		return result;
-	}
-	
 }
