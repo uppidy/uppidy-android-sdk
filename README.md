@@ -37,7 +37,9 @@ It also uses many other open source libraries such as:
 * [android-maven-plugin](https://github.com/jayway/maven-android-plugin)
 
 These are just a few of the major dependencies, the entire list of dependencies
-is listed in the [app's POM file](https://github.com/uppidy/uppidy-android-sdk/blob/master/pom.xml).
+is listed in the [main POM file](https://github.com/uppidy/uppidy-android-sdk/blob/master/pom.xml).
+
+Check out [Uppidy Android Demo](https://github.com/uppidy/uppidy-android-demo) to see how to use this SDK. 
 
 ## Contributing
 
