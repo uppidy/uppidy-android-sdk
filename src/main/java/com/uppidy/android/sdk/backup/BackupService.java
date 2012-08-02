@@ -136,14 +136,13 @@ public abstract class BackupService extends IntentService
 			{
 				if( getSharedPreferences().getBoolean(ENABLED, false) )
 				{
-					Log.w( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled."
-							+ " Send an intent with action BackupService.ACTION_START first." );
+					Log.i( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled."
+							+ " To enable the service, send an intent with action BackupService.ACTION_START." );
 				}
 				else 
 				{
-					Log.w( TAG, "User defined intent (" + action + ") received, starting backup on container identified by " + mp.getContainerId() );
+					Log.i( TAG, "User defined intent (" + action + ") received, starting backup on container identified by " + mp.getContainerId() );
 					while( doBackup( mp ) );
-					Log.w( TAG, "Backup complete" );
 				}
 			}
 		} 
@@ -175,10 +174,12 @@ public abstract class BackupService extends IntentService
 		List<ApiMessage> messages = mp.getNextSyncBundle();
 		if( messages == null || messages.size() == 0 ) return false;
 		
+		Log.i( TAG, "Backing up " + messages.size() + " messages on container identified by " + mp.getContainerId() );
+
 		Uppidy uppidy = getUppidyConnectionRepository().findPrimaryConnection(Uppidy.class).getApi();
 		if( uppidy == null )
 		{
-			Log.e( TAG, "Uppidy connection not found" );
+			Log.e( TAG, "Uppidy connection not found. Backup aborted." );
 			return false;
 		}
 		List<String> addresses = new ArrayList<String>();
@@ -195,6 +196,8 @@ public abstract class BackupService extends IntentService
 		backupOperations.sync( mp.getContainerId(), sync );
 		
 		mp.backupDone( messages );
+		Log.i( TAG, "Backup complete" );
+		
 		return true;
 	}
 	
