@@ -129,7 +129,7 @@ public abstract class BackupService extends IntentService
 				Editor editor = getSharedPreferences().edit();
 				editor.putBoolean(ENABLED, false);
 				editor.commit();
-				stopSelf();
+ 
 			}
 			// user-defined intents     
 			else if( (mp = providers.get(action)) != null ) 
