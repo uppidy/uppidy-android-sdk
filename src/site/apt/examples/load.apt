@@ -18,7 +18,16 @@ Loading contacts, messages, conversations
   In case of loading of items you need to select a backup container that you want to use as source of information.
 
 +-----+
-// how to list containers
+	...
+	String containerId = null;
+	Uppidy uppidy = connectionRepository.findPrimaryConnection(Uppidy.class).getApi();
+	String number = getPhoneNumber();
+	List<ApiContainer> containers = uppidy.backupOperations().listContainers(Collections.singletonMap("number", number));
+	if(!containers.isEmpty()) {
+		container = containers.get(0);
+		containerId = container.getId();
+	}	
+	...
 +-----+
 
 * Contact
@@ -26,7 +35,9 @@ Loading contacts, messages, conversations
   <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
 
 +-----+
-// how to list contacts
+	...
+	List<ApiContact> contacts = uppidy.backupOperations().listContacts(containerId, null);
+	...
 +-----+
 
 * Message
@@ -34,6 +45,23 @@ Loading contacts, messages, conversations
   <<<Message>>> represents information about a post in a conversation. <<<Message>>> direction is indicated by <<<sent>>> flag, 
   time when it was sent is captured by <<<sentTime>>> property, references <<<to>>> and <<<from>>> includes address and name of the contacts.
   
+  To get all the messages backed up to a container you can use <<<listMessages>>> from <<<BackupOperations>>>:
+  
 +-----+
-// how to list messages
+    ...
+	List<ApiMessage> messages = uppidy.backupOperations().listMessages(containerId, null);
+	...
 +-----+
+
+  To find messages filtering them by dates, context (<<<account>>>, <<<device>>>, <<<contact>>> or <<<group>>>) or keywords you can use <<<searchFeed>>> from <<<FeedOperations>>>:
+  
++-----+
+    ...
+	List<ApiMessage> accountMessages = uppidy.feedOperations().searchFeed("account", "me", "xxx", 0, 100, new Date(0), new Date());
+	List<ApiMessage> deviceMessages = uppidy.feedOperations().searchFeed("device", containerId, "xxx", 0, 100, new Date(0), new Date());
+	List<ApiMessage> contactMessages = uppidy.feedOperations().searchFeed("contact", contactId, "xxx", 0, 100, new Date(0), new Date());
+	List<ApiMessage> groupMessages = uppidy.feedOperations().searchFeed("group", groupId, "xxx", 0, 100, new Date(0), new Date());
+	...
++-----+
+
+ More examples and working demo code is part of {{{https://github.com/uppidy/uppidy-android-demo}Uppidy Android Demo}}.
