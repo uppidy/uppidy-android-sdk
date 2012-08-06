@@ -95,7 +95,7 @@ Backing up contacts, messages, conversations
 
 * Contact
 
-  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
+  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> of the contact and <<<addressByType>>> mapping of type to list of address items:
 
 +-----+
 	...
@@ -109,7 +109,7 @@ Backing up contacts, messages, conversations
 
 * Backup
 
-  And finally, to actually sync the data to Uppidy servers you should use the <<<sync>>> from <<<BackupOperations>>>:
+  And finally, to actually sync the data to Uppidy servers you should call <<<sync>>> from <<<BackupOperations>>>:
   
 +-----+
 	...
