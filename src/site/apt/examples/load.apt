@@ -9,13 +9,14 @@
 
 Loading contacts, messages, conversations
 
-  To load your content back you can either use search or need to lookup a backup container and load its items directly.
+  To load your content back you can either use search or need to lookup a backup <<<container>>> and load its items directly.
 
 %{toc|section=1|fromDepth=2|toDepth=3}
 
 * Container
 
-  In case of loading of items you need to select a backup container that you want to use as source of information.
+  To load backed up data you should look up a backup <<<container>>> that was used to store it. 
+  Typically you would do it by phone <<<number>>> or <<<deviceId>>>:
 
 +-----+
 	...
@@ -32,7 +33,7 @@ Loading contacts, messages, conversations
 
 * Contact
 
-  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
+  <<<Contact>>> represents information from user's address book. You can list contacts from specific <<<container>>>
 
 +-----+
 	...
@@ -57,10 +58,10 @@ Loading contacts, messages, conversations
   
 +-----+
     ...
-	List<ApiMessage> accountMessages = uppidy.feedOperations().searchFeed("account", "me", "xxx", 0, 100, new Date(0), new Date());
-	List<ApiMessage> deviceMessages = uppidy.feedOperations().searchFeed("device", containerId, "xxx", 0, 100, new Date(0), new Date());
-	List<ApiMessage> contactMessages = uppidy.feedOperations().searchFeed("contact", contactId, "xxx", 0, 100, new Date(0), new Date());
-	List<ApiMessage> groupMessages = uppidy.feedOperations().searchFeed("group", groupId, "xxx", 0, 100, new Date(0), new Date());
+	List<ApiMessage> accountMessages = uppidy.feedOperations().searchFeed("account", "me", "xxx", 0, 25, new Date(0), new Date());
+	List<ApiMessage> deviceMessages = uppidy.feedOperations().searchFeed("device", containerId, "xxx", 0, 25, new Date(0), new Date());
+	List<ApiMessage> contactMessages = uppidy.feedOperations().searchFeed("contact", contactId, "xxx", 0, 25, new Date(0), new Date());
+	List<ApiMessage> groupMessages = uppidy.feedOperations().searchFeed("group", groupId, "xxx", 0, 25, new Date(0), new Date());
 	...
 +-----+
 
