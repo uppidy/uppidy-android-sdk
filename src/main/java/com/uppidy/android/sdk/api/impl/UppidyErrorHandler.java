@@ -25,8 +25,6 @@ import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.RevokedAuthorizationException;
 import org.springframework.social.UncategorizedApiException;
-import org.springframework.social.facebook.api.NotAFriendException;
-import org.springframework.social.facebook.api.ResourceOwnershipException;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
 /**
@@ -62,7 +60,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 
 	/**
 	 * Examines the error data returned from Uppidy and throws the most applicable exception.
-	 * @param errorDetails a Map containing a "type" and a "message" corresponding to the Graph API's error response structure.
+	 * @param errorDetails a Map containing a "type" and a "message" corresponding to the Uppidy API's error response structure.
 	 */
 	void handleUppidyError(HttpStatus statusCode, Map<String, Object> errorDetails) {
 		// Can't trust the type to be useful. It's often OAuthException, even for things not OAuth-related. 
@@ -88,13 +86,13 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 				throw new InvalidAuthorizationException(message);				
 			} else if (message.contains("Application does not have the capability to make this API call.") || message.contains("App must be on whitelist")) {
 				throw new OperationNotPermittedException(message);
-			} else if (message.contains("Invalid fbid") || message.contains("The parameter url is required")) { 
+			} else if (message.contains("Invalid id") || message.contains("The parameter url is required")) { 
 				throw new OperationNotPermittedException("Invalid object for this operation");
 			} else if (message.contains("Duplicate status message") ) {
 				throw new DuplicateStatusException(message);
 			} else if (message.contains("Feed action request limit reached")) {
 				throw new RateLimitExceededException();
-			} else if (message.contains("The status you are trying to publish is a duplicate of, or too similar to, one that we recently posted to Twitter")) {
+			} else if (message.contains("The status you are trying to publish is a duplicate of, or too similar to, one that we recently posted")) {
 				throw new DuplicateStatusException(message);
 			}
 		} else if (statusCode == HttpStatus.UNAUTHORIZED) {
@@ -116,13 +114,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		} else if (statusCode == HttpStatus.NOT_FOUND) {
 			throw new ResourceNotFoundException(message);
 		} else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) {
-			if (message.equals("User must be an owner of the friendlist")) { // watch for pattern in similar message in other resources
-				throw new ResourceOwnershipException(message);
-			} else if (message.equals("The member must be a friend of the current user.")) {
-				throw new NotAFriendException(message);
-			} else {
-				throw new InternalServerErrorException(message);
-			}
+			throw new InternalServerErrorException(message);
 		}
 	}
 
@@ -134,9 +126,6 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		} else if (message.contains("The session is invalid because the user logged out.")) {
 			throw new RevokedAuthorizationException(message);
 		} else if (message.contains("has not authorized application")) {
-			// Per https://developers.facebook.com/blog/post/500/, this could be in the message when the user removes the application.
-			// In reality, "The session has been invalidated because the user has changed the password." is what you get in that case.
-			// Leaving this check in place in case there FB does return this message (could be a bug in FB?)
 			throw new RevokedAuthorizationException(message);
 		} else {
 			throw new InvalidAuthorizationException(message);				

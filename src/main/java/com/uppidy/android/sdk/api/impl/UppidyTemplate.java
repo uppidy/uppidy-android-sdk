@@ -16,7 +16,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.social.NotAuthorizedException;
 import org.springframework.social.UncategorizedApiException;
-import org.springframework.social.facebook.api.ImageType;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
@@ -154,8 +153,8 @@ public class UppidyTemplate extends AbstractOAuth2ApiBinding implements UppidyAp
 		return deserializeDataList(dataNode, type);
 	}
 
-	public byte[] fetchImage(String objectId, String connectionType, ImageType type) {
-		URI uri = URIBuilder.fromUri(baseUrl + objectId + "/" + connectionType + "?type=" + type.toString().toLowerCase()).build();
+	public byte[] fetchImage(String objectId, String connectionType, String imageType) {
+		URI uri = URIBuilder.fromUri(baseUrl + objectId + "/" + connectionType + "?type=" + imageType.toLowerCase()).build();
 		ResponseEntity<byte[]> response = getRestTemplate().getForEntity(uri, byte[].class);
 		if(response.getStatusCode() == HttpStatus.FOUND) {
 			throw new UnsupportedOperationException("Attempt to fetch image resulted in a redirect which could not be followed. Add Apache HttpComponents HttpClient to the classpath " +

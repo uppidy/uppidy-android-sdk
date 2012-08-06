@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.jackson.JsonNode;
-import org.springframework.social.facebook.api.ImageType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -32,21 +31,12 @@ class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 		return uppidyApi.fetchObject(userId + "/profile", ApiProfile.class);
 	}
 	
-	public byte[] getUserProfileImage() {
-		requireAuthorization();
-		return getUserProfileImage("me", ImageType.NORMAL);
-	}
-	
-	public byte[] getUserProfileImage(String userId) {
-		return getUserProfileImage(userId, ImageType.NORMAL);
-	}
-
-	public byte[] getUserProfileImage(ImageType imageType) {
+	public byte[] getUserProfileImage(String imageType) {
 		requireAuthorization();
 		return getUserProfileImage("me", imageType);
 	}
 	
-	public byte[] getUserProfileImage(String userId, ImageType imageType) {
+	public byte[] getUserProfileImage(String userId, String imageType) {
 		return uppidyApi.fetchImage(userId, "picture", imageType);
 	}
 
