@@ -2,7 +2,6 @@ package com.uppidy.android.sdk.api;
 
 import java.util.List;
 
-import org.springframework.social.facebook.api.ImageType;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -60,7 +59,7 @@ public interface UppidyApi {
 	 * @param imageType the type of image to retrieve (eg., small, normal, large, or square)
 	 * @return an image as an array of bytes.
 	 */
-	byte[] fetchImage(String objectId, String connectionName, ImageType imageType);	
+	byte[] fetchImage(String objectId, String connectionName, String imageType);	
 
 	/**
 	 * Publishes data to an object's connection.

@@ -38,7 +38,7 @@ public interface UserOperations {
 	
 	/**
 	 * Searches for users.
-	 * @param query the search query (e.g., "Michael Scott")
+	 * @param query the search query (e.g., "John Smith")
 	 * @return a list of {@link ApiContactInfo}s, each representing a user who matched the given query.
 	 * @throws ApiException if there is an error while communicating with Uppidy.
 	 * @throws MissingAuthorizationException if UppidyTemplate was not created with an access token.
