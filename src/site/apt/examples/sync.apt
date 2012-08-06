@@ -72,7 +72,7 @@ Backing up contacts, messages, conversations
 * Message
 
   <<<Message>>> represents information about a post in a conversation. <<<Message>>> direction is indicated by <<<sent>>> flag, 
-  time when it was sent is captured by <<<sentTime>>> property, references <<<to>>> and <<<from>>> includes address and name of the contacts.
+  time when it was sent is captured by <<<sentTime>>> property, <<<ContactInfo>>> in <<<to>>> and <<<from>>> include address and name of the contacts.
   
 +-----+
 	...
