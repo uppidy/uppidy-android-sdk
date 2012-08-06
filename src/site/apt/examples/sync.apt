@@ -24,16 +24,50 @@ Backing up contacts, messages, conversations
   At this point we only support <<<id>>>, <<<number>>> and <<<deviceId>>> as possible names for query parameters for <<<listContainers>>> operation:
 
 +-----+
-// how to init a container
+	...
+	Uppidy uppidy = connectionRepository.findPrimaryConnection(Uppidy.class).getApi();
+	Map<String, String> queryParams = new HashMap<String, String>();
+	String containerId = ctx.getContainerId();
+	String phoneNumber = null;
+	String deviceId = null;
+	if(containerId != null) {
+		queryParams.put("id", containerId);
+	} else {
+		// Returns the phone number string for line 1, for example, the MSISDN for a GSM phone. 
+		phoneNumber = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+		if (phoneNumber == null || phoneNumber.length() == 0) {
+			// Returns the unique device ID, for example, the IMEI for GSM and the MEID or ESN for CDMA phones. 
+			deviceId = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+			queryParams.put("deviceId", deviceId);					
+		} else {
+			queryParams.put("number", phoneNumber);
+		}
+	}
+	ApiContainer container = null;
+	List<ApiContainer> containers = uppidy.backupOperations().listContainers(queryParams);
+	if(containers.isEmpty()) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		if(phoneNumber != null && phoneNumber.length() > 0) parameters.put("number", phoneNumber);
+		if(deviceId != null && deviceId.length() > 0) parameters.put("deviceId", deviceId);
+		parameters.put("description", Build.MODEL);
+		container = uppidy.backupOperations().createContainer(parameters);
+	} else {
+		container = containers.get(0);
+	}
+	...
 +-----+
 
-* Contact
+* Sync
 
-  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
+  <<<Sync>>> is a just a transfer data object for backup / restore operations:
 
 +-----+
-// how to create a contact
+	...
+	ApiSync sync = new ApiSync();
+	sync.setClientVersion("12.07");
+	...
 +-----+
+
 
 * Message
 
@@ -41,5 +75,47 @@ Backing up contacts, messages, conversations
   time when it was sent is captured by <<<sentTime>>> property, references <<<to>>> and <<<from>>> includes address and name of the contacts.
   
 +-----+
-// how to construct a message
+	...
+	ApiContactInfo myInfo = container.getOwner();
+	
+	ApiContactInfo contactInfo = new ApiContactInfo();
+	contactInfo.setName("Uppidy User");
+	contactInfo.setAddress("8181868174");
+
+	ApiMessage message = new ApiMessage();
+	message.setSentTime(new Date());
+	message.setSent(Math.random() > 0.5);				
+	message.setFrom(message.isSent() ? myInfo : contactInfo);
+	message.setTo(Collections.singletonList(message.isSent() ? contactInfo : myInfo));
+	message.setText("Fake message generated at " + message.getSentTime());
+	
+	sync.setMessages(Collections.singletonList(message));
+	...
 +-----+
+
+* Contact
+
+  <<<Contact>>> represents information from user's address book. At this point it only contains <<<name>>> and <<<address>>> properties:
+
++-----+
+	...
+	ApiContact contact = new ApiContact();
+	contact.setName(contactInfo.getName());
+	contact.setAddressByType(Collections.singletonMap("phone", Collections.singletonList(contactInfo.getAddress())));
+	
+	sync.setContacts(Collections.singletonList(contact));
+	...
++-----+
+
+* Backup
+
+  And finally, to actually sync the data to Uppidy servers you should use the <<<sync>>> from <<<BackupOperations>>>:
+  
++-----+
+	...
+	uppidy.backupOperations().sync(containerId, sync);
+	...
++-----+
+
+ More examples and working demo code is part of {{{https://github.com/uppidy/uppidy-android-demo}Uppidy Android Demo}}.
+  
