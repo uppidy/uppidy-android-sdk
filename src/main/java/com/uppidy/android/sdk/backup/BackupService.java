@@ -102,6 +102,17 @@ public abstract class BackupService extends IntentService
 	protected abstract SharedPreferences getSharedPreferences();
 	
 	/**
+	 * Returns true if backup is enabled.
+	 * <p>BackupService checks the return value of this method on every intent received 
+	 * and doesn't perform backup operations if this method returns if {@code false}.
+	 * <p> Default implementation always returns {@code true}
+	 * @return boolean 
+	 */
+	protected boolean isEnabled()
+	{
+		return true;
+	}
+	/**
 	 * Handles 3 types of intents:
 	 * <ul>
 	 *   <li> BackupService.ACTION_START - starts backup if network is available
