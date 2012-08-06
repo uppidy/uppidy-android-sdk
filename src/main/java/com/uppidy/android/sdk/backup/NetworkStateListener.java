@@ -8,14 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.content.LocalBroadcastManager;
-//import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * @author Vyacheslav Mukhortov
- * Listens for ConnectivityManager.CONNECTIVITY_ACTION, checks the network state 
- * and sends an intent to BackupService if data network is available.
- * Enable this {@code <receiver>} in AndroidManifest.xml if you want to start BackupService implicitly.
+ * Listens for ConnectivityManager.CONNECTIVITY_ACTION intent action, checks the network state 
+ * and starts {@link BackupService} if data network is available.
+ * Enable this {@code <receiver>} in AndroidManifest.xml if you want to start 
+ * {@link BackupService} when data network is available.
  * Requires the permission ACCESS_NETWORK_STATE. 
  */
 public class NetworkStateListener extends BroadcastReceiver
@@ -33,7 +32,7 @@ public class NetworkStateListener extends BroadcastReceiver
 		    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 		    if( networkInfo != null && networkInfo.isConnected() )
 		    {
-		    	LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(BackupService.ACTION_START) );
+		    	context.startService(new Intent(BackupService.ACTION_BACKUP_ALL) );
 		    }
 		}
 	}

@@ -13,15 +13,13 @@ import org.springframework.social.connect.ConnectionRepository;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.uppidy.android.sdk.api.BackupOperations;
 import com.uppidy.android.sdk.api.ApiContactInfo;
 import com.uppidy.android.sdk.api.ApiMessage;
 import com.uppidy.android.sdk.api.ApiSync;
+import com.uppidy.android.sdk.api.BackupOperations;
 import com.uppidy.android.sdk.api.Uppidy;
 
 import de.akquinet.android.androlog.Log;
@@ -30,18 +28,15 @@ import de.akquinet.android.androlog.Log;
  * @author Vyacheslav Mukhortov
  * There are 2 ways to initiate the backup service:
  * <ul>
- *   <li> by sending an intent with user-defined action used while registering {@link MessageProvider}
- *   <li> by calling Context.startService with an intent action {@link BackupService.ACTION_START}
- *   <>
+ *   <li> by calling Context.startService with user-defined intent action used while registering {@link MessageProvider}
+ *   <li> by calling Context.startService with an intent action {@link BackupService.ACTION_BACKUP_ALL}
  * </ul>
  * Requires the following permissions: ACCESS_NETWORK_STATE, WRITE_EXTERNAL_STORAGE
  */
 public abstract class BackupService extends IntentService
 {	
 	protected static String TAG = "BackupService";
-	public static final String ACTION_START = "com.uppidy.android.sdk.backup.START";
-	public static final String ACTION_STOP  = "com.uppidy.android.sdk.backup.STOP";
-	public static final String ENABLED      = "com.uppidy.android.sdk.backup.ENABLED";
+	public static final String ACTION_BACKUP_ALL = "com.uppidy.android.sdk.backup.BACKUP_ALL";
 	
 	private HashMap<String,MessageProvider> providers = new HashMap<String, MessageProvider>();
 	
@@ -95,15 +90,8 @@ public abstract class BackupService extends IntentService
 	protected abstract ConnectionRepository getUppidyConnectionRepository();
 	
 	/**
-	 * Must return {@link SharedPreferences} object that will be used by BackupService 
-	 * to keep a persistent state of the {@link BackupService.ENABLED} parameter. 
-	 * @return
-	 */
-	protected abstract SharedPreferences getSharedPreferences();
-	
-	/**
-	 * Returns true if backup is enabled.
-	 * <p>BackupService checks the return value of this method on every intent received 
+	 * Must returns true if backup is enabled.
+	 * <p>{@link BackupService} checks the return value of this method on every intent received 
 	 * and doesn't perform backup operations if this method returns if {@code false}.
 	 * <p> Default implementation always returns {@code true}
 	 * @return boolean 
@@ -112,11 +100,23 @@ public abstract class BackupService extends IntentService
 	{
 		return true;
 	}
+	
 	/**
-	 * Handles 3 types of intents:
+	 * Default implementation returns {@code true} if any data network is available.
+	 * @return
+	 */
+	protected boolean isOnline() 
+	{
+	    ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+	    return (networkInfo != null && networkInfo.isConnected());
+	} 	
+	
+	/**
+	 * Handles 2 types of intents:
 	 * <ul>
-	 *   <li> BackupService.ACTION_START - starts backup if network is available
-	 *   <li> BackupService.ACTION_STOP  - stops itself
+	 *   <li> BackupService.ACTION_BACKUP_ALL - starts backup on all providers if isEnabled() returns true 
+	 *   and network is available
 	 *   <li> user defined intents passed while registering {@link MessageProvider}s
 	 * </ul>
 	 * @see android.app.IntentService#onHandleIntent(android.content.Intent)
@@ -128,24 +128,14 @@ public abstract class BackupService extends IntentService
 		{
 			String action = intent.getAction();
 			MessageProvider mp;
-			if( action.equals( ACTION_START ) ) 
+			if( action.equals( ACTION_BACKUP_ALL ) ) 
 	    	{
-				Editor editor = getSharedPreferences().edit();
-				editor.putBoolean(ENABLED, true);
-				editor.commit();
-				backupAll(); 
+				if( isEnabled() ) backupAll(); 
 	    	}
-			else if( action.equals( ACTION_STOP  ) )
-			{
-				Editor editor = getSharedPreferences().edit();
-				editor.putBoolean(ENABLED, false);
-				editor.commit();
- 
-			}
 			// user-defined intents     
 			else if( (mp = providers.get(action)) != null ) 
 			{
-				if( getSharedPreferences().getBoolean(ENABLED, false) )
+				if( isEnabled() )
 				{
 					Log.i( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled."
 							+ " To enable the service, send an intent with action BackupService.ACTION_START." );
@@ -212,10 +202,5 @@ public abstract class BackupService extends IntentService
 		return true;
 	}
 	
-	private boolean isOnline() 
-	{
-	    ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-	    return (networkInfo != null && networkInfo.isConnected());
-	} 
+
 }
