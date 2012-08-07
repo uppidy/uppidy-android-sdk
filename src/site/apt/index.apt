@@ -8,7 +8,7 @@
 
 Uppidy Android SDK
 
- {{{https://github.com/uppidy/uppidy-android-sdk}Uppidy Android SDK}} module provides access to Uppidy Web Services API and contains framework for development of backup data providers
+ {{{https://github.com/uppidy/uppidy-android-sdk}Uppidy Android SDK}} module provides access to Uppidy Web Services API and contains framework for development of backup data providers.
 
 * Examples
 
@@ -20,6 +20,6 @@ Uppidy Android SDK
    
  More details on Uppidy Web Services API can be found by looking at classes from {{{./apidocs/com/uppidy/android/sdk/api/package-summary.html}com.uppidy.android.sdk.api}} package.
  
- More examples and working demo code can {{{https://github.com/uppidy/uppidy-android-demo}Uppidy Android Demo}}.
+ More examples and working demo code can be found in {{{https://github.com/uppidy/uppidy-android-demo}Uppidy Android Demo}}.
  
- You can experiment with API using web services console available on {{{http://develop.uppidy.com}Uppidy Developers Site}}
+ You can experiment with API using web services console available on {{{http://develop.uppidy.com}Uppidy Developers Site}}.
