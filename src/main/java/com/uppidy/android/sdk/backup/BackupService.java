@@ -90,7 +90,7 @@ public abstract class BackupService extends IntentService
 	protected abstract ConnectionRepository getUppidyConnectionRepository();
 	
 	/**
-	 * Must returns true if backup is enabled.
+	 * Must return true if backup is enabled.
 	 * <p>{@link BackupService} checks the return value of this method on every intent received 
 	 * and doesn't perform backup operations if this method returns if {@code false}.
 	 * <p> Default implementation always returns {@code true}
