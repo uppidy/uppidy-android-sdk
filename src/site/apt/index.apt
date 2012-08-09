@@ -20,6 +20,10 @@ Uppidy Android SDK
    
  More details on Uppidy Web Services API can be found by looking at classes from {{{./apidocs/com/uppidy/android/sdk/api/package-summary.html}com.uppidy.android.sdk.api}} package.
  
+ General info on how OAuth 2.0 is supported can be found in {{{http://static.springsource.org/spring-android/docs/1.0.x/reference/html/auth.html}Spring for Android Auth Module Documentation}}.
+ 
+ One good starting point for information on how to setup build and development environment can be {{http://static.springsource.org/spring-android/docs/1.0.x/reference/html/spring-android-maven.html}Maven Dependency Management}} page from {{{http://static.springsource.org/spring-android/docs/1.0.x/reference/html/}Spring for Android Reference Manual}}.
+ 
  More examples and working demo code can be found in {{{https://github.com/uppidy/uppidy-android-demo}Uppidy Android Demo}}.
  
  You can experiment with API using web services console available on {{{http://develop.uppidy.com}Uppidy Developers Site}}.
