@@ -90,6 +90,16 @@ public abstract class BackupService extends IntentService
 	protected abstract ConnectionRepository getUppidyConnectionRepository();
 	
 	/**
+	 * This method is called on any exception caught during Intent processing.
+	 * @param ex
+	 */
+	protected void onError( Exception ex )
+	{
+		String msg = ex.getMessage();
+		Log.d( TAG, msg == null ? ex.toString() : msg );
+	}
+
+	/**
 	 * Must return true if backup is enabled.
 	 * <p>{@link BackupService} checks the return value of this method on every intent received 
 	 * and doesn't perform backup operations if this method returns if {@code false}.
@@ -149,8 +159,7 @@ public abstract class BackupService extends IntentService
 		} 
 		catch( Exception ex )
 		{
-			String msg = ex.getMessage();
-			Log.e( msg == null ? ex.toString() : msg );
+			onError( ex );
 		}
 	}
 
@@ -201,6 +210,4 @@ public abstract class BackupService extends IntentService
 		
 		return true;
 	}
-	
-
 }
