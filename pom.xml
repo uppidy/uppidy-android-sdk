@@ -9,7 +9,7 @@
 	<packaging>apklib</packaging>
 	<name>com.uppidy.andoroid.sdk</name>
 	<description>Uppidy Android SDK</description>
-	<url>https://develop.uppidy.com/public/docs/uppidy-android-sdk</url>
+	<url>http://develop.uppidy.com/public/docs/uppidy-android-sdk</url>
 	<scm>
 		<connection>scm:git:ssh://git@github.com/uppidy/uppidy-android-sdk.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/uppidy/uppidy-android-sdk.git</developerConnection>
