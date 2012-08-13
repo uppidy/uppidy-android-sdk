@@ -93,7 +93,7 @@ public abstract class BackupService extends IntentService
 	 * This method is called on any exception caught during Intent processing.
 	 * @param ex
 	 */
-	protected void onError( Exception ex )
+	protected void onError( Exception ex, Intent intent )
 	{
 		String msg = ex.getMessage();
 		Log.d( TAG, msg == null ? ex.toString() : msg );
@@ -147,19 +147,19 @@ public abstract class BackupService extends IntentService
 			{
 				if( isEnabled() )
 				{
-					Log.i( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled."
-							+ " To enable the service, send an intent with action BackupService.ACTION_START." );
+					Log.i( TAG, "User defined intent (" + action + ") received, starting backup on container identified by " + mp.getContainerId() );
+					while( doBackup( mp ) );
 				}
 				else 
 				{
-					Log.i( TAG, "User defined intent (" + action + ") received, starting backup on container identified by " + mp.getContainerId() );
-					while( doBackup( mp ) );
+					Log.i( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled."
+							+ " To enable the service, send an intent with action BackupService.ACTION_START." );
 				}
 			}
 		} 
 		catch( Exception ex )
 		{
-			onError( ex );
+			onError( ex, intent );
 		}
 	}
 
@@ -180,7 +180,8 @@ public abstract class BackupService extends IntentService
 	
 	private boolean doBackup( MessageProvider mp )
 	{
-		if( mp == null || !isOnline() ) return false;
+		if( mp == null || !isOnline() || !isEnabled() ) return false;
+		
 		List<ApiMessage> messages = mp.getNextSyncBundle();
 		if( messages == null || messages.size() == 0 ) return false;
 		
