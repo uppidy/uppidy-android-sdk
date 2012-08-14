@@ -13,8 +13,8 @@ import com.uppidy.android.sdk.api.impl.UppidyTemplate;
 public class UppidyServiceProvider extends AbstractOAuth2ServiceProvider<Uppidy> {
 	private String baseUrl;
 
-	public UppidyServiceProvider(String clientId, String clientSecret, String baseUrl) {
-		super(new UppidyOAuth2Template(clientId, clientSecret, baseUrl));
+	public UppidyServiceProvider(String clientId, String baseUrl) {
+		super(new UppidyOAuth2Template(clientId, baseUrl));
 		this.baseUrl = baseUrl;
 	}
 

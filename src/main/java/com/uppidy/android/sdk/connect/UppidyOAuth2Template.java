@@ -19,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public class UppidyOAuth2Template extends OAuth2Template {
 
-	public UppidyOAuth2Template(String clientId, String clientSecret, String baseUrl) {
-		super(clientId, clientSecret, baseUrl + "/oauth/authorize", baseUrl + "/oauth/access_token");
+	public UppidyOAuth2Template(String clientId, String baseUrl) {
+		super(clientId, "", baseUrl + "/oauth/authorize", baseUrl + "/oauth/access_token");
 	}
 
 	@Override
