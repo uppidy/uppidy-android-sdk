@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,9 +21,10 @@ import org.springframework.web.client.RestTemplate;
 public class UppidyOAuth2Template extends OAuth2Template {
 
 	public UppidyOAuth2Template(String clientId, String baseUrl) {
-		super(clientId, "", baseUrl + "/oauth/authorize", baseUrl + "/oauth/access_token");
+		super(clientId, "", baseUrl + "/oauth/authorize", baseUrl + "/oauth/token");
 	}
 
+	/*
 	@Override
 	protected RestTemplate createRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate(ClientHttpRequestFactorySelector.getRequestFactory());
@@ -43,4 +45,18 @@ public class UppidyOAuth2Template extends OAuth2Template {
 		String expires = response.getFirst("expires");
 		return new AccessGrant(response.getFirst("access_token"), null, null, expires != null ? Integer.valueOf(expires) : null);
 	}
+	*/
+	/*
+	public AccessGrant exchangeForAccess(String username, String password, MultiValueMap<String, String> additionalParameters) {
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+		params.set("client_id", clientId);
+		params.set("username", username);
+		params.set("password", password);
+		params.set("grant_type", "password");
+		if (additionalParameters != null) {
+			params.putAll(additionalParameters);
+		}
+		return postForAccessGrant(accessTokenUrl, params);
+	}
+	*/
 }

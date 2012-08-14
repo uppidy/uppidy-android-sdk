@@ -80,9 +80,11 @@ class BackupTemplate extends AbstractUppidyOperations implements BackupOperation
 		requireAuthorization();
 		String objectId = "me/containers/" + containerId + "/sync/" + type;
 		Date result = uppidyApi.fetchObject(objectId, Date.class);
+		/*
 		if(result == null) {
 			result = Calendar.getInstance().getTime();
 		}
+		*/
 		return result;
 	}
 
