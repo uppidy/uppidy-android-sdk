@@ -86,9 +86,12 @@ public abstract class BackupService extends IntentService
 	 */
 	protected abstract ConnectionRepository getUppidyConnectionRepository();
 	
+
 	/**
 	 * This method is called on any exception caught during Intent processing.
-	 * @param ex
+	 * @param ex - exception caught
+	 * @param intent - Intent caused an exception
+	 * @param mp - MessageProvider being processed when exception was caught
 	 */
 	protected void onError( Exception ex, Intent intent, MessageProvider mp )
 	{
