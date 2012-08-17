@@ -19,8 +19,6 @@ public class ApiBodyPart {
 	
 	private String contentType;
 	
-	private String fileName;
-	
 	private Date createdTime;
 
 	private Date updatedTime;
@@ -63,13 +61,5 @@ public class ApiBodyPart {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
 	}
 }
