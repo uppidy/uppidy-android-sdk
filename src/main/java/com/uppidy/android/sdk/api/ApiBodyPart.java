@@ -2,8 +2,6 @@ package com.uppidy.android.sdk.api;
 
 import java.util.Date;
 
-import org.springframework.core.io.Resource;
-
 /**
  * Model class representing a body part of a message, i.e. picture, video, audio or other text or binary attachment. 
  * 
@@ -15,9 +13,11 @@ public class ApiBodyPart {
 	
 	private String id;
 	
-	private Resource resource;
+	private byte[] data;
 	
 	private String contentType;
+	
+	private String fileName;
 	
 	private Date createdTime;
 
@@ -47,12 +47,12 @@ public class ApiBodyPart {
 		this.updatedTime = updatedTime;
 	}
 
-	public Resource getResource() {
-		return resource;
+	public byte[] getData() {
+		return data;
 	}
 
-	public void setResource(Resource resource) {
-		this.resource = resource;
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
 	public String getContentType() {
@@ -61,5 +61,13 @@ public class ApiBodyPart {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 }
