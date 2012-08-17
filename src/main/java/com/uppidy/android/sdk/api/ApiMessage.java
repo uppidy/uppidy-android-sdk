@@ -30,6 +30,8 @@ public class ApiMessage {
 	
 	private ApiLocation location;
 	
+	private List<ApiBodyPart> parts;
+	
 	public Date getCreatedTime() {
 		return createdTime;
 	}
@@ -94,18 +96,20 @@ public class ApiMessage {
 		this.updatedTime = updatedTime;
 	}
 
-	/**
-	 * @return the location
-	 */
 	public ApiLocation getLocation() {
 		return location;
 	}
 
-	/**
-	 * @param location the location to set
-	 */
 	public void setLocation(ApiLocation location) {
 		this.location = location;
+	}
+
+	public List<ApiBodyPart> getParts() {
+		return parts;
+	}
+
+	public void setParts(List<ApiBodyPart> parts) {
+		this.parts = parts;
 	}
 	
 }
