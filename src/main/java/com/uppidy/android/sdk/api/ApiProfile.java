@@ -1,6 +1,5 @@
 package com.uppidy.android.sdk.api;
 
-import java.util.Date;
 
 /**
  * Model class containing a Uppidy user's profile information.
@@ -9,49 +8,28 @@ import java.util.Date;
  * 
  * @author arudnev@uppidy.com
  */
-public class ApiProfile extends ApiExtensible {
-
-	private Date createdTime;
+public class ApiProfile extends ApiEntity {
 
 	private String email;
 
-	private String id;
-
 	private String name;
-
-	private Date updatedTime;
 
 	private String username;
 
 	private Boolean verified;
 
 	/**
-	 * The time the user's profile was created.
-	 * @return the time that the user's profile was updated
-	 */
-	public Date getCreatedTime() {
-		return createdTime;
-	}
-
-	/**
-	 * The user's email address.
-	 * Available only with "email" permission.
+	 * The user's email address. Available only with "email" permission.
+	 * 
 	 * @return The user's email address
 	 */
 	public String getEmail() {
-	    return email;
-    }
-
-	/**
-	 * The user's Uppidy id
-	 * @return The user's Uppidy id
-	 */
-	public String getId() {
-		return id;
+		return email;
 	}
 
 	/**
 	 * The user's full name
+	 * 
 	 * @return The user's full name
 	 */
 	public String getName() {
@@ -59,15 +37,8 @@ public class ApiProfile extends ApiExtensible {
 	}
 
 	/**
-	 * The last time the user's profile was updated.
-	 * @return the time that the user's profile was updated
-	 */
-	public Date getUpdatedTime() {
-		return updatedTime;
-	}
-	
-	/**
 	 * The user's Uppidy username
+	 * 
 	 * @return the user's Uppidy username
 	 */
 	public String getUsername() {
@@ -75,38 +46,28 @@ public class ApiProfile extends ApiExtensible {
 	}
 
 	/**
-	 * The user's account verification status.
-	 * Available only if requested by an authenticated user.
-	 * @return true if the profile has been verified, false if it has not, or null if not available.
+	 * The user's account verification status. Available only if requested by an
+	 * authenticated user.
+	 * 
+	 * @return true if the profile has been verified, false if it has not, or
+	 *         null if not available.
 	 */
 	public Boolean isVerified() {
 		return verified;
 	}
 
-	public void setCreatedTime(Date createdTime) {
-		this.createdTime = createdTime;
-	}
-	
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public void setUpdatedTime(Date updatedTime) {
-		this.updatedTime = updatedTime;
-	}
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public void setVerified(Boolean verified) {
 		this.verified = verified;
 	}

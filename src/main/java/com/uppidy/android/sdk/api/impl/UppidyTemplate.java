@@ -164,10 +164,10 @@ public class UppidyTemplate extends AbstractOAuth2ApiBinding implements UppidyAp
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String publish(String objectId, String connectionType, Object data) {
+	public Map<String, Object> publish(String objectId, String connectionType, Object data) {
 		URI uri = URIBuilder.fromUri(baseUrl + objectId + "/" + connectionType).build();
 		Map<String, Object> response = getRestTemplate().postForObject(uri, data, Map.class);
-		return (String) response.get("id");
+		return response;
 	}
 	
 	public <T> T publish(String objectId, String connectionType, Class<T> type, Object data) {
@@ -177,7 +177,7 @@ public class UppidyTemplate extends AbstractOAuth2ApiBinding implements UppidyAp
 	
 	public void post(String objectId, String connectionType, Object data) {
 		URI uri = URIBuilder.fromUri(baseUrl + objectId + "/" + connectionType).build();
-		getRestTemplate().postForObject(uri, data, String.class);
+		getRestTemplate().postForObject(uri, data, Void.class);
 	}
 	
 	public <T> T post(String objectId, String connectionType, Object data, Class<T> responseType) {
@@ -189,14 +189,14 @@ public class UppidyTemplate extends AbstractOAuth2ApiBinding implements UppidyAp
 		LinkedMultiValueMap<String, String> deleteRequest = new LinkedMultiValueMap<String, String>();
 		deleteRequest.set("method", "delete");
 		URI uri = URIBuilder.fromUri(baseUrl + objectId).build();
-		getRestTemplate().postForObject(uri, deleteRequest, String.class);
+		getRestTemplate().postForObject(uri, deleteRequest, Void.class);
 	}
 	
 	public void delete(String objectId, String connectionType) {
 		LinkedMultiValueMap<String, String> deleteRequest = new LinkedMultiValueMap<String, String>();
 		deleteRequest.set("method", "delete");
 		URI uri = URIBuilder.fromUri(baseUrl + objectId + "/" + connectionType).build();
-		getRestTemplate().postForObject(uri, deleteRequest, String.class);
+		getRestTemplate().postForObject(uri, deleteRequest, Void.class);
 	}
 	
 	// AbstractOAuth2ApiBinding hooks

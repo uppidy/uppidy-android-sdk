@@ -96,7 +96,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 				throw new DuplicateStatusException(message);
 			}
 		} else if (statusCode == HttpStatus.UNAUTHORIZED) {
-			if (message.startsWith("Error validating access token")) {
+			if (message.startsWith("Invalid access token")) {
 				handleInvalidAccessToken(message);
 			}
 			throw new NotAuthorizedException(message);

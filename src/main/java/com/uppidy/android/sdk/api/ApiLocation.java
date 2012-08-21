@@ -7,11 +7,11 @@ package com.uppidy.android.sdk.api;
  * 
  * @author arudnev@uppidy.com
  */
-public class ApiLocation {
+public class ApiLocation extends ApiObject {
 
 	private double latitude;
 	private double longitude;
-		
+
 	public double getLatitude() {
 		return latitude;
 	}
@@ -26,29 +26,5 @@ public class ApiLocation {
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
-	}
-
-	@Override
-	public String toString() {
-		return "{ \"latitude\":" + latitude + ", \"longitude\":" + longitude + " }";
-	}
-
-	@Override
-	public int hashCode() {
-		long lat = Double.doubleToLongBits(latitude);
-		long lon = Double.doubleToLongBits(longitude);
-		return (int)(lat^(lat>>>32)) +(int)(lon^(lon>>>32));
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if(obj != null && obj instanceof ApiLocation) {
-			ApiLocation other = (ApiLocation) obj;
-			return other.latitude == latitude && other.longitude == longitude;
-		}
-		return false;
 	}
 }

@@ -2,6 +2,8 @@ package com.uppidy.android.sdk.api;
 
 import java.util.List;
 
+import org.springframework.util.MultiValueMap;
+
 /**
  * Transport object for the synchronization operation
  * 
@@ -9,13 +11,17 @@ import java.util.List;
  * 
  * @author arudnev@uppidy.com
  */
-public class ApiSync extends ApiExtensible {
+public class ApiSync extends ApiEntity {
 
 	private String clientVersion;
-	private List<ApiMessage> messages;
-	private List<ApiConversation> conversations;
-	private List<ApiContact> contacts;
+
 	private ApiLocation location;
+	
+	private List<ApiMessage> messages;
+	
+	private List<ApiConversation> conversations;
+	
+	private List<ApiContact> contacts;
 
 	public String getClientVersion() {
 		return clientVersion;
@@ -25,6 +31,20 @@ public class ApiSync extends ApiExtensible {
 		this.clientVersion = clientVersion;
 	}
 
+	/**
+	 * @return the location
+	 */
+	public ApiLocation getLocation() {
+		return location;
+	}
+
+	/**
+	 * @param location
+	 *            the location to set
+	 */
+	public void setLocation(ApiLocation location) {
+		this.location = location;
+	}
 	public List<ApiMessage> getMessages() {
 		return messages;
 	}
@@ -49,17 +69,11 @@ public class ApiSync extends ApiExtensible {
 		this.conversations = conversations;
 	}
 	
-	/**
-	 * @return the location
-	 */
-	public ApiLocation getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(ApiLocation location) {
-		this.location = location;
+	@Override
+	public void copyFromRef(MultiValueMap<String, ApiEntity> map) {
+		super.copyFromRef(map);
+		copyFromRefs(messages, map);
+		copyFromRefs(contacts, map);
+		copyFromRefs(conversations, map);
 	}
 }

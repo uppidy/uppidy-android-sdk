@@ -3,51 +3,39 @@ package com.uppidy.android.sdk.api;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.util.MultiValueMap;
+
 /**
- * Model class representing an entry in a feed or chat conversation. 
+ * Model class representing an entry in a feed or chat conversation.
  * 
  * Part of the Uppidy Web Services API
  * 
  * @author arudnev@uppidy.com
  */
-public class ApiMessage {
-	
-	private String id;
-	
+public class ApiMessage extends ApiEntity {
+
 	private ApiContactInfo from;
 
 	private List<ApiContactInfo> to;
 
 	private String text;
-	
+
 	private boolean sent;
 
 	private Date sentTime;
-
-	private Date createdTime;
-
-	private Date updatedTime;
 	
 	private ApiLocation location;
-	
+
 	private List<ApiBodyPart> parts;
-	
-	public Date getCreatedTime() {
-		return createdTime;
-	}
 
 	public ApiContactInfo getFrom() {
 		return from;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	public String getText() {
 		return text;
 	}
-	
+
 	public boolean isSent() {
 		return sent;
 	}
@@ -60,26 +48,14 @@ public class ApiMessage {
 		return to;
 	}
 
-	public Date getUpdatedTime() {
-		return updatedTime;
-	}
-
-	public void setCreatedTime(Date createdTime) {
-		this.createdTime = createdTime;
-	}
-
 	public void setFrom(ApiContactInfo from) {
 		this.from = from;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	public void setSent(boolean sent) {
 		this.sent = sent;
 	}
@@ -90,10 +66,6 @@ public class ApiMessage {
 
 	public void setTo(List<ApiContactInfo> to) {
 		this.to = to;
-	}
-
-	public void setUpdatedTime(Date updatedTime) {
-		this.updatedTime = updatedTime;
 	}
 
 	public ApiLocation getLocation() {
@@ -111,5 +83,10 @@ public class ApiMessage {
 	public void setParts(List<ApiBodyPart> parts) {
 		this.parts = parts;
 	}
-	
+
+	@Override
+	public void copyFromRef(MultiValueMap<String, ApiEntity> map) {
+		super.copyFromRef(map);
+		copyFromRefs(parts, map);
+	}
 }
