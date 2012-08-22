@@ -66,14 +66,17 @@ public class ApiEntity extends ApiObject {
 	
 	public void copyFromRef(MultiValueMap<String, ApiEntity> map) {
 		if(ref != null && map != null) {
-			ApiEntity other = map.getFirst(ref);
-			if(other != null) {
-				this.id = other.id;
-				this.createdTime = other.createdTime;
-				this.updatedTime = other.updatedTime;
-				this.ref = other.ref;
-			}			
+			copyRefData(map.getFirst(ref));					
 		}
+	}
+	
+	public void copyRefData(ApiEntity other) {
+		if(other != null) {
+			this.id = other.id;
+			this.createdTime = other.createdTime;
+			this.updatedTime = other.updatedTime;
+			this.ref = other.ref;
+		}	
 	}
 	
 	public static void copyFromRefs(Collection<? extends ApiEntity> entities, MultiValueMap<String, ApiEntity> map) {
