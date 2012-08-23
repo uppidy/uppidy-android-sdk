@@ -28,7 +28,7 @@ class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 	}
 
 	public ApiProfile getUserProfile(String userId) {
-		return uppidyApi.fetchObject(userId + "/profile", ApiProfile.class);
+		return uppidyApi.fetchObject(userId + "/profile", ApiProfile.class, null);
 	}
 	
 	public byte[] getUserProfileImage(String imageType) {
@@ -40,27 +40,11 @@ class UserTemplate extends AbstractUppidyOperations implements UserOperations {
 		return uppidyApi.fetchImage(userId, "picture", imageType);
 	}
 
-	public List<String> getUserPermissions() {
-		JsonNode responseNode = uppidyApi.fetchObject("me/permissions", JsonNode.class);		
-		return deserializePermissionsNodeToList(responseNode);
-	}
-
-	public List<ApiContactInfo> search(String query) {
+	public List<ApiProfile> search(String query) {
 		requireAuthorization();
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
 		queryParams.add("query", query);
-		return uppidyApi.fetchConnections("search", "user", ApiContactInfo.class, queryParams);
+		return uppidyApi.fetchConnections("search", "user", ApiProfile.class, queryParams);
 	}
 
-	private List<String> deserializePermissionsNodeToList(JsonNode jsonNode) {
-		JsonNode dataNode = jsonNode.get("data");			
-		List<String> permissions = new ArrayList<String>();
-		for (Iterator<JsonNode> elementIt = dataNode.getElements(); elementIt.hasNext(); ) {
-			JsonNode permissionsElement = elementIt.next();
-			for (Iterator<String> fieldNamesIt = permissionsElement.getFieldNames(); fieldNamesIt.hasNext(); ) {
-				permissions.add(fieldNamesIt.next());
-			}
-		}			
-		return permissions;
-	}
 }

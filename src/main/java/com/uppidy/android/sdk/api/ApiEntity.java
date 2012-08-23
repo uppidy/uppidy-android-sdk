@@ -2,7 +2,6 @@ package com.uppidy.android.sdk.api;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -23,8 +22,6 @@ public class ApiEntity extends ApiObject {
 	private Date createdTime;
 
 	private Date updatedTime;
-
-	private Map<String, String> extra;
 
 	@JsonSerialize(include = Inclusion.NON_NULL)
 	public String getId() {
@@ -60,15 +57,6 @@ public class ApiEntity extends ApiObject {
 
 	public void setUpdatedTime(Date updatedTime) {
 		this.updatedTime = updatedTime;
-	}
-
-	@JsonSerialize(include = Inclusion.NON_NULL)
-	public Map<String, String> getExtra() {
-		return extra;
-	}
-
-	public void setExtra(Map<String, String> extra) {
-		this.extra = extra;
 	}
 	
 	public void copyFromRef(MultiValueMap<String, ApiEntity> map) {
