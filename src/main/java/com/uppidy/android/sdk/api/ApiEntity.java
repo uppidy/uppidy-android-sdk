@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -24,6 +26,7 @@ public class ApiEntity extends ApiObject {
 
 	private Map<String, String> extra;
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public String getId() {
 		return id;
 	}
@@ -32,6 +35,7 @@ public class ApiEntity extends ApiObject {
 		this.id = id;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public String getRef() {
 		return ref;
 	}
@@ -40,6 +44,7 @@ public class ApiEntity extends ApiObject {
 		this.ref = ref;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public Date getCreatedTime() {
 		return createdTime;
 	}
@@ -48,6 +53,7 @@ public class ApiEntity extends ApiObject {
 		this.createdTime = createdTime;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public Date getUpdatedTime() {
 		return updatedTime;
 	}
@@ -56,6 +62,7 @@ public class ApiEntity extends ApiObject {
 		this.updatedTime = updatedTime;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public Map<String, String> getExtra() {
 		return extra;
 	}
