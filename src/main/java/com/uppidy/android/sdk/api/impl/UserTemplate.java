@@ -1,14 +1,10 @@
 package com.uppidy.android.sdk.api.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.uppidy.android.sdk.api.ApiContactInfo;
 import com.uppidy.android.sdk.api.ApiProfile;
 import com.uppidy.android.sdk.api.UppidyApi;
 import com.uppidy.android.sdk.api.UserOperations;
