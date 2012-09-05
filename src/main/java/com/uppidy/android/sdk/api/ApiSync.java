@@ -2,6 +2,8 @@ package com.uppidy.android.sdk.api;
 
 import java.util.List;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -23,6 +25,7 @@ public class ApiSync extends ApiEntity {
 	
 	private List<ApiContact> contacts;
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public String getClientVersion() {
 		return clientVersion;
 	}
@@ -31,28 +34,26 @@ public class ApiSync extends ApiEntity {
 		this.clientVersion = clientVersion;
 	}
 
-	/**
-	 * @return the location
-	 */
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public ApiLocation getLocation() {
 		return location;
 	}
 
-	/**
-	 * @param location
-	 *            the location to set
-	 */
 	public void setLocation(ApiLocation location) {
 		this.location = location;
 	}
+	
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public List<ApiMessage> getMessages() {
 		return messages;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public List<ApiContact> getContacts() {
 		return contacts;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public List<ApiConversation> getConversations() {
 		return conversations;
 	}

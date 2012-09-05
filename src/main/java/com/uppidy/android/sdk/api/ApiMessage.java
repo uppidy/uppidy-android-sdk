@@ -3,6 +3,8 @@ package com.uppidy.android.sdk.api;
 import java.util.Date;
 import java.util.List;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -28,6 +30,7 @@ public class ApiMessage extends ApiEntity {
 
 	private List<ApiBodyPart> parts;
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public ApiContactInfo getFrom() {
 		return from;
 	}
@@ -44,6 +47,7 @@ public class ApiMessage extends ApiEntity {
 		return sentTime;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public List<ApiContactInfo> getTo() {
 		return to;
 	}
@@ -68,6 +72,7 @@ public class ApiMessage extends ApiEntity {
 		this.to = to;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public ApiLocation getLocation() {
 		return location;
 	}
@@ -76,6 +81,7 @@ public class ApiMessage extends ApiEntity {
 		this.location = location;
 	}
 
+	@JsonSerialize(include = Inclusion.NON_NULL)
 	public List<ApiBodyPart> getParts() {
 		return parts;
 	}
