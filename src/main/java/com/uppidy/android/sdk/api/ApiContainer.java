@@ -14,6 +14,16 @@ public class ApiContainer extends ApiEntity {
 
 	private String description;
 
+	private String type;
+	
+	private String model;
+	
+	private String version;
+	
+	private ApiProfile master;
+	
+	private ApiAppInfo app;
+
 	private ApiContactInfo owner;
 
 	public String getDeviceId() {
@@ -30,6 +40,46 @@ public class ApiContainer extends ApiEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public ApiProfile getMaster() {
+		return master;
+	}
+
+	public void setMaster(ApiProfile master) {
+		this.master = master;
+	}
+
+	public ApiAppInfo getApp() {
+		return app;
+	}
+
+	public void setApp(ApiAppInfo app) {
+		this.app = app;
 	}
 
 	public ApiContactInfo getOwner() {

@@ -1,6 +1,3 @@
-/**
- * Copyright (C) Uppidy Inc, 2012
- */
 package com.uppidy.android.sdk.api;
 
 import java.io.FileNotFoundException;
