@@ -81,10 +81,10 @@ public abstract class BackupService extends IntentService
 	}
 	
 	/**
-	 * Must return Uppidy ConnectionRepository 
-	 * @return ConnectionRepository - Uppidy ConnectionRepository
+	 * Must return {@link Uppidy} API class instance 
+	 * @return Uppidy - Uppidy API
 	 */
-	protected abstract ConnectionRepository getUppidyConnectionRepository();
+	protected abstract Uppidy getUppidy();
 	
 
 	/**
@@ -163,8 +163,7 @@ public abstract class BackupService extends IntentService
 				}
 				else 
 				{
-					Log.i( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled."
-							+ " To enable the service, send an intent with action BackupService.ACTION_START." );
+					Log.i( TAG, "User defined intent (" + action + ") received but won't be processed because the service is not enabled." );
 				}
 			}
 		} 
@@ -183,7 +182,7 @@ public abstract class BackupService extends IntentService
 		
 		Log.i( TAG, "Backing up " + sync.getMessages().size() + " messages on container identified by " + mp.getContainerId() );
 
-		Uppidy uppidy = getUppidyConnectionRepository().findPrimaryConnection(Uppidy.class).getApi();
+		Uppidy uppidy = getUppidy();
 		if( uppidy == null )
 		{
 			Log.e( TAG, "Uppidy connection not found. Backup aborted." );

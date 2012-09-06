@@ -110,22 +110,10 @@ public class UppidyTemplate extends AbstractOAuth2ApiBinding implements UppidyAp
 		return getRestTemplate();
 	}
 	
-	// low-level REST API operations
-	public <T> T fetchObject(String objectId, Class<T> type) {
-		URI uri = URIBuilder.fromUri(baseUrl + objectId).build();
-		try {
-			return getRestTemplate().getForObject(uri, type);
-		} catch (RestClientException e) {
-			// If the exception has a SocketTimeoutException we throw a different message
-			if (e.contains(SocketTimeoutException.class)) {
-				throw new RestClientException(HOST_UNREACHABLE);
-			}
-			throw e;
-		}
-	}
-	
 	public <T> T fetchObject(String objectId, Class<T> type, MultiValueMap<String, String> queryParameters) {
-		URI uri = URIBuilder.fromUri(baseUrl + objectId).queryParams(queryParameters).build();
+		URI uri = queryParameters == null 
+				? URIBuilder.fromUri(baseUrl + objectId).build()
+				: URIBuilder.fromUri(baseUrl + objectId).queryParams(queryParameters).build();
 		try {
 			return getRestTemplate().getForObject(uri, type);
 		} catch (RestClientException e) {
