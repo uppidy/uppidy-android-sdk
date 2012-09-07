@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.springframework.social.connect.ConnectionRepository;
-
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -102,7 +100,7 @@ public abstract class BackupService extends IntentService
 	/**
 	 * Must return true if backup is enabled.
 	 * <p>{@link BackupService} checks the return value of this method on every intent received 
-	 * and doesn't perform backup operations if this method returns if {@code false}.
+	 * and doesn't perform backup operations if this method returns {@code false}.
 	 * <p> Default implementation always returns {@code true}
 	 * @return boolean 
 	 */
