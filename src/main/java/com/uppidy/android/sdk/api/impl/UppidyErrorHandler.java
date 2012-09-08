@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -172,6 +174,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	private String getErrorMessage(String code) {
 		return "Uppidy Error: " + code;
 	}
+	
 
 	private Map<String, String> extractErrors(List<String> errorsHeader, String prefix) {
 		for (String error : errorsHeader) {
@@ -188,7 +191,10 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	private Map<String, String> extractErrorDetailsFromResponse(ClientHttpResponse response) throws IOException {
 		List<String> errors = response.getHeaders().get(HEADER_ERRORS);
 		if (errors != null) {
-			return extractErrors(errors, "");
+			// for now just return first error code
+			return Collections.singletonMap(ERROR_CODE, errors.get(0));
+			// TODO (AR): use format for the header similar to what is used by OAuth
+			// return extractErrors(errors, "");
 		}
 		errors = response.getHeaders().get(HEADER_WWW_AUTHENTICATE);
 		if (errors != null) {
