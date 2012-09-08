@@ -42,10 +42,12 @@ public class ApiBodyPartResource extends AbstractResource {
 		}
 	}
 
+	@Override
 	public String getDescription() {
 		return "part [" + this.part + "]";
 	}
 
+	@Override
 	public InputStream getInputStream() throws IOException {
 		InputStreamSource source = part.getData();
 		if (source == null) {
@@ -56,6 +58,16 @@ public class ApiBodyPartResource extends AbstractResource {
 			throw new FileNotFoundException(getDescription() + " cannot be opened because it does not exist");
 		}
 		return inputStream;
+	}
+	
+	@Override
+	public String getFilename() {
+		return part.getFileName();
+	}
+	
+	@Override
+	public long contentLength() throws IOException {
+		return -1;
 	}
 
 	/**
