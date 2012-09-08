@@ -175,6 +175,13 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		return "Uppidy Error: " + code;
 	}
 	
+	private Map<String, String> extractFromErrorCodes(List<String> errorsHeader) {
+		Map<String, String> result = new HashMap<String, String>();
+		String code = errorsHeader.get(0);
+		result.put(ERROR_CODE, code);
+		result.put(ERROR_MESSAGE, getErrorMessage(code));
+		return Collections.singletonMap(ERROR_CODE, errorsHeader.get(0));
+	}
 
 	private Map<String, String> extractErrors(List<String> errorsHeader, String prefix) {
 		for (String error : errorsHeader) {
@@ -192,7 +199,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		List<String> errors = response.getHeaders().get(HEADER_ERRORS);
 		if (errors != null) {
 			// for now just return first error code
-			return Collections.singletonMap(ERROR_CODE, errors.get(0));
+			return extractFromErrorCodes(errors);
 			// TODO (AR): use format for the header similar to what is used by OAuth
 			// return extractErrors(errors, "");
 		}
