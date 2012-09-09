@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +179,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		String code = errorsHeader.get(0);
 		result.put(ERROR_CODE, code);
 		result.put(ERROR_MESSAGE, getErrorMessage(code));
-		return Collections.singletonMap(ERROR_CODE, errorsHeader.get(0));
+		return result;
 	}
 
 	private Map<String, String> extractErrors(List<String> errorsHeader, String prefix) {
