@@ -42,8 +42,13 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	public static final String HEADER_ERRORS = "U-Errors";
 	public static final String HEADER_WWW_AUTHENTICATE = "WWW-Authenticate";
 
+	public static final String ERROR_TYPE = "type";
 	public static final String ERROR_CODE = "error";
 	public static final String ERROR_MESSAGE = "error_description";
+	
+	public static final String ERROR_TYPE_OAUTH = "OAuthException";
+	public static final String ERROR_TYPE_UPPIDY = "UppidyException";
+
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
@@ -70,22 +75,46 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Examines the error data returned from Uppidy and throws the most
 	 * applicable exception.
 	 * 
+	 * Here is map of various oauth and uppidy specific error codes to the exception class:
+	 * 
+	 * <table>
+	 * <th><td>Error Code</td><td>Spring Security Exception</td></th>
+	 * <tr><td>invalid_client</td><td>InvalidClientException</td></tr>
+	 * <tr><td>unauthorized_client</td><td>UnauthorizedClientException</td></tr>
+	 * <tr><td>invalid_grant</td><td>InvalidGrantException</td></tr>
+	 * <tr><td>invalid_scope</td><td>InvalidScopeException</td></tr>
+	 * <tr><td>invalid_token</td><td>InvalidTokenException</td></tr>
+	 * <tr><td>invalid_request</td><td>InvalidRequestException</td></tr>
+	 * <tr><td>redirect_uri_mismatch</td><td>RedirectMismatchException</td></tr>
+	 * <tr><td>unsupported_grant_type</td><td>UnsupportedGrantTypeException</td></tr>
+	 * <tr><td>unsupported_response_type</td><td>UnsupportedResponseTypeException</td></tr>
+	 * <tr><td>access_denied</td><td>UserDeniedAuthorizationException</td></tr>
+	 * <tr><td>???</td><td>OAuth2Exception</td></tr>
+	 * </table>
+	 * 
+	 * @param statusCode http status code
+	 * 
 	 * @param errorDetails
-	 *            a Map containing a "type" and a "message" corresponding to the
+	 *            a Map containing a "type", "code" and a "message" corresponding to the
 	 *            Uppidy API's error response structure.
 	 */
 	void handleUppidyError(HttpStatus statusCode, Map<String, String> errorDetails) {
 
+		String type = errorDetails.get(ERROR_TYPE);
 		String code = errorDetails.get(ERROR_CODE);
 		String message = errorDetails.get(ERROR_MESSAGE);
-
+		
 		if (message == null) {
 			message = getErrorMessage(code);
+		}
+
+		if(type.equals(ERROR_TYPE_OAUTH)) {
+			// TODO (AR): handle oauth errors
 		}
 
 		if (statusCode == HttpStatus.OK) {
@@ -177,15 +206,21 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	private Map<String, String> extractFromErrorCodes(List<String> errorsHeader) {
 		Map<String, String> result = new HashMap<String, String>();
 		String code = errorsHeader.get(0);
+		result.put(ERROR_TYPE, ERROR_TYPE_UPPIDY);
 		result.put(ERROR_CODE, code);
+		
 		result.put(ERROR_MESSAGE, getErrorMessage(code));
 		return result;
 	}
 
-	private Map<String, String> extractErrors(List<String> errorsHeader, String prefix) {
+	private Map<String, String> extractErrors(List<String> errorsHeader, String prefix, String type) {
 		for (String error : errorsHeader) {
 			String[] pairs = StringUtil.splitIgnoringQuotes(error.substring(prefix.length()), ',');
-			return StringUtil.splitEachArrayElementAndCreateMap(pairs, "=", "\"");
+			Map<String, String> result = StringUtil.splitEachArrayElementAndCreateMap(pairs, "=", "\"");
+			if(!result.containsKey(ERROR_TYPE)) {
+				result.put(ERROR_TYPE, type);
+			}
+			return result;
 		}
 		return null;
 	}
@@ -204,7 +239,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		}
 		errors = response.getHeaders().get(HEADER_WWW_AUTHENTICATE);
 		if (errors != null) {
-			return extractErrors(errors, "Bearer");
+			return extractErrors(errors, "Bearer", ERROR_TYPE_OAUTH);
 		}
 
 		ObjectMapper mapper = new ObjectMapper(new JsonFactory());
