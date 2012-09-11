@@ -199,8 +199,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	 * <td>403(Forbidden)</td>
 	 * <td>access_denied</td>
 	 * <td>OAuth2AccessDeniedException</td>
-	 * <td>"Invalid token does not contain resource id (" + resourceId + ")" <br />
-	 * "Unsupported access token type: " + tokenType</td>
+	 * <td>"Invalid token does not contain resource id (" + resourceId + ")"</td>
 	 * </tr>
 	 * <tr>
 	 * <td>403(Forbidden)</td>
