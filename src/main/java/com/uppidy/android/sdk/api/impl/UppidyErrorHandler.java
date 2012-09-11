@@ -237,10 +237,6 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 			// TODO (AR): use format for the header similar to what is used by OAuth
 			// return extractErrors(errors, "");
 		}
-		errors = response.getHeaders().get(HEADER_WWW_AUTHENTICATE);
-		if (errors != null) {
-			return extractErrors(errors, "Bearer", ERROR_TYPE_OAUTH);
-		}
 
 		ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 		String json = readFully(response.getBody());
@@ -248,8 +244,12 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 			return mapper.readValue(json, new TypeReference<Map<String, String>>() {
 			});
 		} catch (JsonParseException e) {
-			return null;
+			errors = response.getHeaders().get(HEADER_WWW_AUTHENTICATE);
+			if (errors != null) {
+				return extractErrors(errors, "Bearer", ERROR_TYPE_OAUTH);
+			}
 		}
+		return null;
 	}
 
 	private String readFully(InputStream in) throws IOException {
