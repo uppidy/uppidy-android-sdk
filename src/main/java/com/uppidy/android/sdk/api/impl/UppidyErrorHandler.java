@@ -45,14 +45,13 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	public static final String ERROR_TYPE = "type";
 	public static final String ERROR_CODE = "error";
 	public static final String ERROR_MESSAGE = "error_description";
-	
+
 	public static final String ERROR_TYPE_OAUTH = "OAuthException";
 	public static final String ERROR_TYPE_UPPIDY = "UppidyException";
 
-
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
-		Map<String, String> errorDetails = extractErrorDetailsFromResponse(response);
+		Map<String, Object> errorDetails = extractErrorDetailsFromResponse(response);
 		if (errorDetails == null) {
 			handleUncategorizedError(response, errorDetails);
 		}
@@ -75,45 +74,160 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Examines the error data returned from Uppidy and throws the most
 	 * applicable exception.
 	 * 
-	 * Here is map of various oauth and uppidy specific error codes to the exception class:
+	 * Here is map of various oauth and uppidy specific error codes to the spring security
+	 * exception class:
 	 * 
 	 * <table>
-	 * <th><td>Error Code</td><td>Spring Security Exception</td></th>
-	 * <tr><td>invalid_client</td><td>InvalidClientException</td></tr>
-	 * <tr><td>unauthorized_client</td><td>UnauthorizedClientException</td></tr>
-	 * <tr><td>invalid_grant</td><td>InvalidGrantException</td></tr>
-	 * <tr><td>invalid_scope</td><td>InvalidScopeException</td></tr>
-	 * <tr><td>invalid_token</td><td>InvalidTokenException</td></tr>
-	 * <tr><td>invalid_request</td><td>InvalidRequestException</td></tr>
-	 * <tr><td>redirect_uri_mismatch</td><td>RedirectMismatchException</td></tr>
-	 * <tr><td>unsupported_grant_type</td><td>UnsupportedGrantTypeException</td></tr>
-	 * <tr><td>unsupported_response_type</td><td>UnsupportedResponseTypeException</td></tr>
-	 * <tr><td>access_denied</td><td>UserDeniedAuthorizationException</td></tr>
-	 * <tr><td>???</td><td>OAuth2Exception</td></tr>
+	 * <th>
+	 * <td>HTTP Status</td>
+	 * <td>Error Code</td>
+	 * <td>Spring Security Exception</td>
+	 * <td>Error Message</td></th>
+	 * <tr>
+	 * <td>401(Unauthorized)</td>
+	 * <td>invalid_client</td>
+	 * <td>InvalidClientException</td>
+	 * <td>
+	 * "A client id must be provided" <br />
+	 * "Client not found: " + clientId <br />
+	 * "Bad client credentials" <br />
+	 * "Client ID mismatch" <br />
+	 * "A client_id must be supplied."</td>
+	 * </tr>
+	 * <tr>
+	 * <td>401(Unauthorized)</td>
+	 * <td>unauthorized_client</td>
+	 * <td>UnauthorizedClientException</td>
+	 * <td>???</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>invalid_grant</td>
+	 * <td>InvalidGrantException</td>
+	 * <td>"Invalid authorization code: " + authorizationCode <br />
+	 * "An implicit grant could not be made" <br />
+	 * "A client must have at least one authorized grant type." <br />
+	 * "A redirect_uri can only be used by implicit or authorization_code grant types."
+	 * <br />
+	 * "Could not authenticate user: " + username <br />
+	 * e.getMessage() where e is instance of BadCredentialsException thrown by
+	 * authenticationManager.authenticate(userAuth) <br />
+	 * "Unauthorized grant type: " + grantType <br />
+	 * "Invalid refresh token: " + refreshTokenValue</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>invalid_scope</td>
+	 * <td>InvalidScopeException</td>
+	 * <td>"Invalid scope: " + scope <br />
+	 * "Unable to narrow the scope of the client authentication to " + scope +
+	 * "."</td>
+	 * </tr>
+	 * <tr>
+	 * <td>401(Unauthorized)</td>
+	 * <td>invalid_token</td>
+	 * <td>InvalidTokenException</td>
+	 * <td>"Invalid token: " + token <br />
+	 * "Invalid access token: " + tokenValue <br />
+	 * "Invalid access token (no client id): " + tokenValue <br />
+	 * "Invalid access token: " + accessTokenValue <br />
+	 * "Access token expired: " + accessTokenValue <br />
+	 * "Invalid refresh token (expired): " + refreshToken</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>invalid_request</td>
+	 * <td>InvalidRequestException</td>
+	 * <td>
+	 * "Possible CSRF detected - state parameter was present but no state could be found"
+	 * </td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>redirect_uri_mismatch</td>
+	 * <td>RedirectMismatchException</td>
+	 * <td>"Redirect URI mismatch." <br />
+	 * "Invalid redirect: " + requestedRedirect +
+	 * " does not match one of the registered values: " +
+	 * redirectUris.toString()</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>unsupported_grant_type</td>
+	 * <td>UnsupportedGrantTypeException</td>
+	 * <td>"Unsupported grant type: " + grantType</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>unsupported_response_type</td>
+	 * <td>UnsupportedResponseTypeException</td>
+	 * <td>"Unsupported response types: " + responseTypes <br />
+	 * "Unsupported response type: token"</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>access_denied</td>
+	 * <td>UserDeniedAuthorizationException</td>
+	 * <td>"User denied access"</td>
+	 * </tr>
+	 * <tr>
+	 * <td>400(Bad Request)</td>
+	 * <td>???</td>
+	 * <td>OAuth2Exception</td>
+	 * <td>???</td>
+	 * </tr>
+	 * <tr>
+	 * <td>401(Unauthorized)</td>
+	 * <td>unauthorized</td>
+	 * <td>UnauthorizedException</td>
+	 * <td>e.getMessage() where e is top of stack trace that has
+	 * AuthenticationException in it</td>
+	 * </tr>
+	 * <tr>
+	 * <td>403(Forbidden)</td>
+	 * <td>access_denied</td>
+	 * <td>ForbiddenException</td>
+	 * <td>e.getMessage() where e is top of stack trace that has
+	 * AccessDeniedException in it</td>
+	 * </tr>
+	 * <tr>
+	 * <td>403(Forbidden)</td>
+	 * <td>access_denied</td>
+	 * <td>OAuth2AccessDeniedException</td>
+	 * <td>"Invalid token does not contain resource id (" + resourceId + ")" <br />
+	 * "Unsupported access token type: " + tokenType</td>
+	 * </tr>
+	 * <tr>
+	 * <td>403(Forbidden)</td>
+	 * <td>insufficient_scope</td>
+	 * <td>InsufficientScopeException</td>
+	 * <td>"Insufficient scope for this resource"</td>
+	 * </tr>
 	 * </table>
 	 * 
-	 * @param statusCode http status code
+	 * @param statusCode
+	 *            http status code
 	 * 
 	 * @param errorDetails
-	 *            a Map containing a "type", "code" and a "message" corresponding to the
-	 *            Uppidy API's error response structure.
+	 *            a Map containing a "type", "code" and a "message"
+	 *            corresponding to the Uppidy API's error response structure.
 	 */
-	void handleUppidyError(HttpStatus statusCode, Map<String, String> errorDetails) {
+	void handleUppidyError(HttpStatus statusCode, Map<String, Object> errorDetails) {
 
-		String type = errorDetails.get(ERROR_TYPE);
-		String code = errorDetails.get(ERROR_CODE);
-		String message = errorDetails.get(ERROR_MESSAGE);
-		
+		String type = (String) errorDetails.get(ERROR_TYPE);
+		String code = (String) errorDetails.get(ERROR_CODE);
+		String message = (String) errorDetails.get(ERROR_MESSAGE);
+
 		if (message == null) {
 			message = getErrorMessage(code);
 		}
 
-		if(type.equals(ERROR_TYPE_OAUTH)) {
+		if (type.equals(ERROR_TYPE_OAUTH)) {
 			// TODO (AR): handle oauth errors
 		}
 
@@ -187,37 +301,38 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		}
 	}
 
-	private void handleUncategorizedError(ClientHttpResponse response, Map<String, String> errorDetails) {
+	private void handleUncategorizedError(ClientHttpResponse response, Map<String, Object> errorDetails) {
 		try {
 			super.handleError(response);
 		} catch (Exception e) {
-			if (errorDetails != null) {
-				throw new UncategorizedApiException(errorDetails.get(ERROR_MESSAGE), e);
-			} else {
-				throw new UncategorizedApiException("No error details from Uppidy", e);
+			String message = "No error details from Uppidy";
+			if (errorDetails != null && errorDetails.containsKey(ERROR_MESSAGE)) {
+				message = (String) errorDetails.get(ERROR_MESSAGE);
 			}
+			throw new UncategorizedApiException(message, e);
 		}
 	}
 
 	private String getErrorMessage(String code) {
 		return "Uppidy Error: " + code;
 	}
-	
-	private Map<String, String> extractFromErrorCodes(List<String> errorsHeader) {
-		Map<String, String> result = new HashMap<String, String>();
+
+	private Map<String, Object> extractFromErrorCodes(List<String> errorsHeader) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		String code = errorsHeader.get(0);
 		result.put(ERROR_TYPE, ERROR_TYPE_UPPIDY);
 		result.put(ERROR_CODE, code);
-		
+
 		result.put(ERROR_MESSAGE, getErrorMessage(code));
 		return result;
 	}
 
-	private Map<String, String> extractErrors(List<String> errorsHeader, String prefix, String type) {
+	private Map<String, Object> extractErrors(List<String> errorsHeader, String prefix, String type) {
 		for (String error : errorsHeader) {
 			String[] pairs = StringUtil.splitIgnoringQuotes(error.substring(prefix.length()), ',');
-			Map<String, String> result = StringUtil.splitEachArrayElementAndCreateMap(pairs, "=", "\"");
-			if(!result.containsKey(ERROR_TYPE)) {
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.putAll(StringUtil.splitEachArrayElementAndCreateMap(pairs, "=", "\""));
+			if (!result.containsKey(ERROR_TYPE)) {
 				result.put(ERROR_TYPE, type);
 			}
 			return result;
@@ -229,22 +344,26 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	 * Attempts to extract Uppidy error details from the response. Returns null
 	 * if the response doesn't match the expected JSON error response.
 	 */
-	private Map<String, String> extractErrorDetailsFromResponse(ClientHttpResponse response) throws IOException {
+	private Map<String, Object> extractErrorDetailsFromResponse(ClientHttpResponse response) throws IOException {
 		List<String> errors = response.getHeaders().get(HEADER_ERRORS);
 		if (errors != null) {
 			// for now just return first error code
 			return extractFromErrorCodes(errors);
-			// TODO (AR): use format for the header similar to what is used by OAuth
+			// TODO (AR): use format for the header similar to what is used by
+			// OAuth
 			// return extractErrors(errors, "");
 		}
 
 		ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 		String json = readFully(response.getBody());
 		try {
-			Map<String, String> result = mapper.readValue(json, new TypeReference<Map<String, String>>() {
+			Map<String, Object> result = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
 			});
-			if(!result.containsKey(ERROR_TYPE)) {
-				result.put(ERROR_TYPE, ERROR_TYPE_OAUTH);
+			String code = (String) result.get(ERROR_CODE);
+			if (code != null && code instanceof String) {
+				if (!result.containsKey(ERROR_TYPE)) {
+					result.put(ERROR_TYPE, ERROR_TYPE_OAUTH);
+				}
 			}
 			return result;
 		} catch (JsonParseException e) {
