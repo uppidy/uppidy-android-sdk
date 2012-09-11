@@ -241,8 +241,12 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 		String json = readFully(response.getBody());
 		try {
-			return mapper.readValue(json, new TypeReference<Map<String, String>>() {
+			Map<String, String> result = mapper.readValue(json, new TypeReference<Map<String, String>>() {
 			});
+			if(!result.containsKey(ERROR_TYPE)) {
+				result.put(ERROR_TYPE, ERROR_TYPE_OAUTH);
+			}
+			return result;
 		} catch (JsonParseException e) {
 			errors = response.getHeaders().get(HEADER_WWW_AUTHENTICATE);
 			if (errors != null) {
