@@ -29,6 +29,9 @@ import org.springframework.social.RevokedAuthorizationException;
 import org.springframework.social.UncategorizedApiException;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
+import com.uppidy.android.sdk.api.UppidyApiException;
+import com.uppidy.android.sdk.api.UppidyApiValidationException;
+import com.uppidy.android.sdk.api.UppidyApiVerificationException;
 import com.uppidy.android.util.StringUtil;
 
 /**
@@ -48,6 +51,24 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 
 	public static final String ERROR_TYPE_OAUTH = "OAuthException";
 	public static final String ERROR_TYPE_UPPIDY = "UppidyException";
+	
+	
+	enum UppidyError
+	{
+		ACCOUNT_DISABLED("account.Disabled"),
+		ACCOUNT_UNAUTHORIZED("account.Unauthorized");
+		
+		private String value;
+		UppidyError( String value )
+		{
+			this.value = value;
+		}
+		
+		private String getValue()
+		{
+			return value;
+		}
+	}
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
@@ -222,70 +243,175 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		String code = (String) errorDetails.get(ERROR_CODE);
 		String message = (String) errorDetails.get(ERROR_MESSAGE);
 
-		if (message == null) {
-			message = getErrorMessage(code);
+		if (message == null) message = getErrorMessage(code);
+	
+		if (type.equals(ERROR_TYPE_OAUTH)) 
+		{  
+			handleOauthError(statusCode, code, message );
 		}
-
-		if (type.equals(ERROR_TYPE_OAUTH)) {
-			// TODO (AR): handle oauth errors
+		else if (type.equals(ERROR_TYPE_UPPIDY)) 
+		{ 
+			handleUppidyError(statusCode, code, message );
 		}
-
-		if (statusCode == HttpStatus.OK) {
-			if (message.contains("Some of the aliases you requested do not exist")) {
+		else 
+		{
+			if (statusCode == HttpStatus.NOT_FOUND)
 				throw new ResourceNotFoundException(message);
-			}
-		} else if (statusCode == HttpStatus.BAD_REQUEST) {
-			if (message.contains("Unknown path components")) {
-				throw new ResourceNotFoundException(message);
-			} else if (message.equals("An access token is required to request this resource.")) {
-				throw new MissingAuthorizationException();
-			} else if (message
-					.equals("An active access token must be used to query information about the current user.")) {
-				throw new MissingAuthorizationException();
-			} else if (message.startsWith("Error validating access token")) {
-				handleInvalidAccessToken(message);
-			} else if (message.equals("Error validating application.")) {
-				// Access token with incorrect app ID
-				throw new InvalidAuthorizationException(message);
-			} else if (message.equals("Invalid access token signature.")) {
-				// Access token that fails signature validation
-				throw new InvalidAuthorizationException(message);
-			} else if (message.contains("Application does not have the capability to make this API call.")
-					|| message.contains("App must be on whitelist")) {
-				throw new OperationNotPermittedException(message);
-			} else if (message.contains("Invalid id") || message.contains("The parameter url is required")) {
-				throw new OperationNotPermittedException("Invalid object for this operation");
-			} else if (message.contains("Duplicate status message")) {
-				throw new DuplicateStatusException(message);
-			} else if (message.contains("Feed action request limit reached")) {
-				throw new RateLimitExceededException();
-			} else if (message
-					.contains("The status you are trying to publish is a duplicate of, or too similar to, one that we recently posted")) {
-				throw new DuplicateStatusException(message);
-			}
-		} else if (statusCode == HttpStatus.UNAUTHORIZED) {
-			if (message.startsWith("Invalid access token")) {
-				handleInvalidAccessToken(message);
-			}
-			throw new NotAuthorizedException(message);
-		} else if (statusCode == HttpStatus.FORBIDDEN) {
-			if (message.contains("Requires extended permission")) {
-				String requiredPermission = message.split(": ")[1];
-				throw new InsufficientPermissionException(requiredPermission);
-			} else if (message.contains("Permissions error")) {
-				throw new InsufficientPermissionException();
-			} else if (message.contains("The user hasn't authorized the application to perform this action")) {
-				throw new InsufficientPermissionException();
-			} else {
-				throw new OperationNotPermittedException(message);
-			}
-		} else if (statusCode == HttpStatus.NOT_FOUND) {
-			throw new ResourceNotFoundException(message);
-		} else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) {
-			throw new InternalServerErrorException(message);
+			else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) 
+				throw new InternalServerErrorException(message);
 		}
 	}
 
+	/*
+	 * 400 invalid_grant 
+	 * 	   "Unauthorized grant type: " -> OperationNotPermittedException
+	 *     -> InvalidAuthorizationException
+	 * 400 invalid_scope 
+	 *     "Unable to narrow the scope" -> InsufficientPermissionException
+	 *     -> InvalidAuthorizationException
+	 * 400 invalid_request -> InvalidAuthorizationException
+	 * 400 redirect_uri_mismatch -> InvalidAuthorizationException
+	 * 400 unsupported_grant_type -> InvalidAuthorizationException
+	 * 400 unsupported_response_type -> InvalidAuthorizationException
+	 * 400 assess_denied -> RevokedAuthorizationException
+	 * 400 ??? -> UncategorizedApiException
+	 * 
+	 * 401 unauthorized -> OperationNotPermittedException
+	 * 401 invalid_client -> InvalidAuthorizationException
+	 * 401 unauthorized_client -> OperationNotPermittedException
+	 * 401 invalid_token
+	 * 	   "..expired.." -> ExpiredAuthorizationException
+	 * 	   "Invalid access token (no client id)" -> InvalidAuthorizationException 
+	 *      -> RevokedAuthorizationException	
+	 *      	 
+	 * 403 assess_denied
+	 *       "Invalid token does not contain resource id" -> InvalidAuthorizationException
+	 *       -> OperationNotPermittedException
+	 * 403 insufficient_scope -> InsufficientPermissionException
+	 */
+	private void handleOauthError(HttpStatus statusCode, String code, String message)
+	{
+		if (statusCode == HttpStatus.BAD_REQUEST)
+		{
+			if(code.equals("invalid_grant"))
+			{
+				if(message.startsWith("Unauthorized grant type:")) 
+					throw new OperationNotPermittedException(message);
+				else 
+					throw new InvalidAuthorizationException(message); 
+			}
+			else if(code.equals("invalid_scope"))
+			{
+				if(message.startsWith("Unable to narrow the scope")) 
+					throw new InsufficientPermissionException(message);
+				else 
+					throw new InvalidAuthorizationException(message); 
+			}
+			else if(code.equals("invalid_request")) 
+				throw new InvalidAuthorizationException(message);
+			else if(code.equals("redirect_uri_mismatch")) 
+				throw new InvalidAuthorizationException(message);
+			else if(code.equals("unsupported_grant_type")) 
+				throw new InvalidAuthorizationException(message);
+			else if(code.equals("unsupported_response_type")) 
+				throw new InvalidAuthorizationException(message);
+			else if(code.equals("assess_denied")) 
+				throw new RevokedAuthorizationException(message);
+			else
+				throw new UncategorizedApiException(message, null);
+		}
+		
+		else if(statusCode == HttpStatus.UNAUTHORIZED)
+		{
+			if(code.equals("unauthorized")) 
+				throw new OperationNotPermittedException(message);
+			else if(code.equals("invalid_client")) 
+				throw new InvalidAuthorizationException(message);
+			else if(code.equals("unauthorized_client")) 
+				throw new InvalidAuthorizationException(message);
+			else if(code.equals("invalid_token"))
+			{
+				if(message.startsWith("Invalid access token (no client id)")) 
+					throw new InvalidAuthorizationException(message);
+				else if(message.contains("expired")) 
+					throw new ExpiredAuthorizationException();
+				else 
+					throw new RevokedAuthorizationException(message); 
+			}			
+		}
+
+		else if(statusCode == HttpStatus.FORBIDDEN)
+		{
+
+			if(code.equals("assess_denied"))
+			{
+				if(message.startsWith("Invalid token does not contain resource id")) 
+					throw new InvalidAuthorizationException(message);
+				else
+					throw new OperationNotPermittedException(message);
+			}
+			else if(code.equals("insufficient_scope")) 
+				throw new InsufficientPermissionException(message);		
+		}
+	}
+	
+	/**
+	 * <table>
+	 * <tr><td>Code</td><td>Exception</td></tr>
+	 * <tr><td>+account.Disabled</td><td>RevokedAuthorizationException</td></tr>
+	 * <tr><td>+account.Unauthorized</td><td>InvalidAuthorizationException</td></tr>
+	 * <tr><td>+account.ChangePassword</td><td>InvalidAuthorizationException</td></tr>
+	 * <tr><td>+account.VerificationPending</td><td>UppidyApiVerificationException</td></tr>
+	 * <tr><td>-account.NoEmpty</td><td>RevokedAuthorizationException</td></tr>
+	 * <tr><td>+account.Forbidden</td><td>InvalidAuthorizationException</td></tr>
+	 * 
+	 * <tr><td>+device.Removed</td><td>what shall we do? re-create a container?</td></tr>
+	 * <tr><td>+device.AccountDoesntMatch</td><td>?</td></tr>
+	 * <tr><td>+device.AlreadyRegistered</td><td>?</td></tr>
+	 * <tr><td>-device.NotEmpty</td><td>?</td></tr>
+	 * <tr><td>-device.number.NotEmpty</td><td>?</td></tr>
+	 * <tr><td>device.number.Length</td><td>?</td></tr>
+	 * <tr><td>device.description.NotEmpty</td><td>?</td></tr>
+	 * <tr><td>device.description.Length</td><td>?</td></tr>
+	 * 
+	 * <tr><td>+credentials.Rejected</td><td>?</td></tr>
+	 * 
+	 * <tr><td>host.unreachable</td><td>?</td></tr>
+	 * 
+	 * <tr><td>account.name.NotEmpty</td><td>?</td></tr>
+	 * <tr><td>account.name.Length</td><td>?</td></tr>
+	 * <tr><td></td><td></td></tr>
+	 * <tr><td></td><td></td></tr>
+	 * <tr><td></td><td></td></tr>
+	 * <tr><td></td><td></td></tr>
+	 *  
+	 * <tr><td>none of the above listed and not empty</td><td>UppidyApiValidationException</td></tr>
+	 * <tr><td></td><td></td></tr>
+	 * </table>
+	 * @param statusCode
+	 * @param code
+	 * @param message
+	 */
+	private void handleUppidyError(HttpStatus statusCode, String code, String message)
+	{
+		if (code == null || code.length()==0) return;
+		
+		if (code.equals("account.Disabled"))    
+			throw new RevokedAuthorizationException(message); 
+		else if (code.equals("account.Unauthorized"))
+			throw new InvalidAuthorizationException(message);
+		else if (code.equals("account.ChangePassword"))
+			throw new InvalidAuthorizationException(message);
+		else if (code.equals("account.VerificationPending"))
+			throw new UppidyApiVerificationException(message);
+		else if (code.equals("account.NoEmpty"))
+			throw new RevokedAuthorizationException(message);
+		else if (code.equals("account.Forbidden"))		
+			throw new InvalidAuthorizationException( message );
+		// none of the above listed codes
+		else throw new UppidyApiValidationException(message);
+	}
+	
 	private void handleInvalidAccessToken(String message) {
 		if (message.contains("Session has expired at unix time")) {
 			throw new ExpiredAuthorizationException();
