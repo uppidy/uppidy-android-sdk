@@ -15,21 +15,16 @@ import org.codehaus.jackson.type.TypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.social.DuplicateStatusException;
 import org.springframework.social.ExpiredAuthorizationException;
 import org.springframework.social.InsufficientPermissionException;
 import org.springframework.social.InternalServerErrorException;
 import org.springframework.social.InvalidAuthorizationException;
-import org.springframework.social.MissingAuthorizationException;
-import org.springframework.social.NotAuthorizedException;
 import org.springframework.social.OperationNotPermittedException;
-import org.springframework.social.RateLimitExceededException;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.RevokedAuthorizationException;
 import org.springframework.social.UncategorizedApiException;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
-import com.uppidy.android.sdk.api.UppidyApiException;
 import com.uppidy.android.sdk.api.UppidyApiValidationException;
 import com.uppidy.android.sdk.api.UppidyApiVerificationException;
 import com.uppidy.android.util.StringUtil;
@@ -64,7 +59,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 			this.value = value;
 		}
 		
-		private String getValue()
+		private String value()
 		{
 			return value;
 		}
@@ -368,7 +363,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	 * <tr><td>+device.Removed</td><td>what shall we do? re-create a container?</td></tr>
 	 * <tr><td>+device.AccountDoesntMatch</td><td>?</td></tr>
 	 * <tr><td>+device.AlreadyRegistered</td><td>?</td></tr>
-	 * <tr><td>-device.NotEmpty</td><td>?</td></tr>
+	 * <tr><td>+device.NotEmpty</td><td>?</td></tr>
 	 * <tr><td>-device.number.NotEmpty</td><td>?</td></tr>
 	 * <tr><td>device.number.Length</td><td>?</td></tr>
 	 * <tr><td>device.description.NotEmpty</td><td>?</td></tr>
@@ -376,14 +371,22 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 	 * 
 	 * <tr><td>+credentials.Rejected</td><td>?</td></tr>
 	 * 
-	 * <tr><td>host.unreachable</td><td>?</td></tr>
+	 * <tr><td>-host.unreachable</td><td>?</td></tr>
 	 * 
-	 * <tr><td>account.name.NotEmpty</td><td>?</td></tr>
-	 * <tr><td>account.name.Length</td><td>?</td></tr>
-	 * <tr><td></td><td></td></tr>
-	 * <tr><td></td><td></td></tr>
-	 * <tr><td></td><td></td></tr>
-	 * <tr><td></td><td></td></tr>
+	 * <tr><td>-account.name.NotEmpty</td><td>?</td></tr>
+	 * <tr><td>-account.name.Length</td><td>?</td></tr>
+	 * 
+	 * <tr><td>+account.email.AccountUniqueLogin</td><td>???used as AccountUniqueLogin.email in AccountServiceImpl.java</td></tr>
+	 * <tr><td>account.email.NotEmpty</td><td></td></tr>
+	 * <tr><td>account.email.Email</td><td></td></tr>
+	 * <tr><td>account.email.Length</td><td></td></tr>
+	 * 
+	 * <tr><td>+account.username.AccountUniqueLogin</td><td>???used as AccountUniqueLogin.username in AccountServiceImpl.java</td></tr>
+	 * <tr><td>account.username.NotEmpty</td><td></td></tr>
+	 * <tr><td>account.username.Length</td><td></td></tr>
+	 * 
+	 * <tr><td>account.password.NotEmpty</td><td></td></tr>
+	 * <tr><td>account.password.Length</td><td></td></tr>
 	 *  
 	 * <tr><td>none of the above listed and not empty</td><td>UppidyApiValidationException</td></tr>
 	 * <tr><td></td><td></td></tr>
@@ -411,25 +414,14 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		// none of the above listed codes
 		else throw new UppidyApiValidationException(message);
 	}
-	
-	private void handleInvalidAccessToken(String message) {
-		if (message.contains("Session has expired at unix time")) {
-			throw new ExpiredAuthorizationException();
-		} else if (message.contains("The session has been invalidated because the user has changed the password.")) {
-			throw new RevokedAuthorizationException(message);
-		} else if (message.contains("The session is invalid because the user logged out.")) {
-			throw new RevokedAuthorizationException(message);
-		} else if (message.contains("has not authorized application")) {
-			throw new RevokedAuthorizationException(message);
-		} else {
-			throw new InvalidAuthorizationException(message);
-		}
-	}
 
 	private void handleUncategorizedError(ClientHttpResponse response, Map<String, Object> errorDetails) {
-		try {
+		try 
+		{
 			super.handleError(response);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			String message = "No error details from Uppidy";
 			if (errorDetails != null && errorDetails.containsKey(ERROR_MESSAGE)) {
 				message = (String) errorDetails.get(ERROR_MESSAGE);
