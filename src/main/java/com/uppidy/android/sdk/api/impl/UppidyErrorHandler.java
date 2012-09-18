@@ -25,8 +25,8 @@ import org.springframework.social.RevokedAuthorizationException;
 import org.springframework.social.UncategorizedApiException;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
+import com.uppidy.android.sdk.api.UppidyApiException;
 import com.uppidy.android.sdk.api.UppidyApiValidationException;
-import com.uppidy.android.sdk.api.UppidyApiVerificationException;
 import com.uppidy.android.util.StringUtil;
 
 /**
@@ -46,24 +46,6 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 
 	public static final String ERROR_TYPE_OAUTH = "OAuthException";
 	public static final String ERROR_TYPE_UPPIDY = "UppidyException";
-	
-	
-	enum UppidyError
-	{
-		ACCOUNT_DISABLED("account.Disabled"),
-		ACCOUNT_UNAUTHORIZED("account.Unauthorized");
-		
-		private String value;
-		UppidyError( String value )
-		{
-			this.value = value;
-		}
-		
-		private String value()
-		{
-			return value;
-		}
-	}
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
@@ -238,6 +220,8 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		String code = (String) errorDetails.get(ERROR_CODE);
 		String message = (String) errorDetails.get(ERROR_MESSAGE);
 
+		if (type == null) type = "No error type provided";
+		if (code == null) code = "No error code provided";
 		if (message == null) message = getErrorMessage(code);
 	
 		if (type.equals(ERROR_TYPE_OAUTH)) 
@@ -257,32 +241,8 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 		}
 	}
 
-	/*
-	 * 400 invalid_grant 
-	 * 	   "Unauthorized grant type: " -> OperationNotPermittedException
-	 *     -> InvalidAuthorizationException
-	 * 400 invalid_scope 
-	 *     "Unable to narrow the scope" -> InsufficientPermissionException
-	 *     -> InvalidAuthorizationException
-	 * 400 invalid_request -> InvalidAuthorizationException
-	 * 400 redirect_uri_mismatch -> InvalidAuthorizationException
-	 * 400 unsupported_grant_type -> InvalidAuthorizationException
-	 * 400 unsupported_response_type -> InvalidAuthorizationException
-	 * 400 assess_denied -> RevokedAuthorizationException
-	 * 400 ??? -> UncategorizedApiException
-	 * 
-	 * 401 unauthorized -> OperationNotPermittedException
-	 * 401 invalid_client -> InvalidAuthorizationException
-	 * 401 unauthorized_client -> OperationNotPermittedException
-	 * 401 invalid_token
-	 * 	   "..expired.." -> ExpiredAuthorizationException
-	 * 	   "Invalid access token (no client id)" -> InvalidAuthorizationException 
-	 *      -> RevokedAuthorizationException	
-	 *      	 
-	 * 403 assess_denied
-	 *       "Invalid token does not contain resource id" -> InvalidAuthorizationException
-	 *       -> OperationNotPermittedException
-	 * 403 insufficient_scope -> InsufficientPermissionException
+	/**
+	 * Handles OAuth error according to https://admin.uppidy.com/trac/wiki/UppidyErrors
 	 */
 	private void handleOauthError(HttpStatus statusCode, String code, String message)
 	{
@@ -323,7 +283,7 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 			else if(code.equals("invalid_client")) 
 				throw new InvalidAuthorizationException(message);
 			else if(code.equals("unauthorized_client")) 
-				throw new InvalidAuthorizationException(message);
+				throw new OperationNotPermittedException(message);
 			else if(code.equals("invalid_token"))
 			{
 				if(message.startsWith("Invalid access token (no client id)")) 
@@ -332,7 +292,9 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 					throw new ExpiredAuthorizationException();
 				else 
 					throw new RevokedAuthorizationException(message); 
-			}			
+			}
+			else
+				throw new UncategorizedApiException(message, null);
 		}
 
 		else if(statusCode == HttpStatus.FORBIDDEN)
@@ -346,73 +308,39 @@ class UppidyErrorHandler extends DefaultResponseErrorHandler {
 					throw new OperationNotPermittedException(message);
 			}
 			else if(code.equals("insufficient_scope")) 
-				throw new InsufficientPermissionException(message);		
+				 throw new InsufficientPermissionException(message);
+			else
+				throw new UncategorizedApiException(message, null);
 		}
+		else
+			throw new UncategorizedApiException(message, null);
 	}
 	
 	/**
-	 * <table>
-	 * <tr><td>Code</td><td>Exception</td></tr>
-	 * <tr><td>+account.Disabled</td><td>RevokedAuthorizationException</td></tr>
-	 * <tr><td>+account.Unauthorized</td><td>InvalidAuthorizationException</td></tr>
-	 * <tr><td>+account.ChangePassword</td><td>InvalidAuthorizationException</td></tr>
-	 * <tr><td>+account.VerificationPending</td><td>UppidyApiVerificationException</td></tr>
-	 * <tr><td>-account.NoEmpty</td><td>RevokedAuthorizationException</td></tr>
-	 * <tr><td>+account.Forbidden</td><td>InvalidAuthorizationException</td></tr>
-	 * 
-	 * <tr><td>+device.Removed</td><td>what shall we do? re-create a container?</td></tr>
-	 * <tr><td>+device.AccountDoesntMatch</td><td>?</td></tr>
-	 * <tr><td>+device.AlreadyRegistered</td><td>?</td></tr>
-	 * <tr><td>+device.NotEmpty</td><td>?</td></tr>
-	 * <tr><td>-device.number.NotEmpty</td><td>?</td></tr>
-	 * <tr><td>device.number.Length</td><td>?</td></tr>
-	 * <tr><td>device.description.NotEmpty</td><td>?</td></tr>
-	 * <tr><td>device.description.Length</td><td>?</td></tr>
-	 * 
-	 * <tr><td>+credentials.Rejected</td><td>?</td></tr>
-	 * 
-	 * <tr><td>-host.unreachable</td><td>?</td></tr>
-	 * 
-	 * <tr><td>-account.name.NotEmpty</td><td>?</td></tr>
-	 * <tr><td>-account.name.Length</td><td>?</td></tr>
-	 * 
-	 * <tr><td>+account.email.AccountUniqueLogin</td><td>???used as AccountUniqueLogin.email in AccountServiceImpl.java</td></tr>
-	 * <tr><td>account.email.NotEmpty</td><td></td></tr>
-	 * <tr><td>account.email.Email</td><td></td></tr>
-	 * <tr><td>account.email.Length</td><td></td></tr>
-	 * 
-	 * <tr><td>+account.username.AccountUniqueLogin</td><td>???used as AccountUniqueLogin.username in AccountServiceImpl.java</td></tr>
-	 * <tr><td>account.username.NotEmpty</td><td></td></tr>
-	 * <tr><td>account.username.Length</td><td></td></tr>
-	 * 
-	 * <tr><td>account.password.NotEmpty</td><td></td></tr>
-	 * <tr><td>account.password.Length</td><td></td></tr>
-	 *  
-	 * <tr><td>none of the above listed and not empty</td><td>UppidyApiValidationException</td></tr>
-	 * <tr><td></td><td></td></tr>
-	 * </table>
+	 * Handles Uppidy error according to https://admin.uppidy.com/trac/wiki/UppidyErrors
 	 * @param statusCode
 	 * @param code
 	 * @param message
 	 */
 	private void handleUppidyError(HttpStatus statusCode, String code, String message)
-	{
-		if (code == null || code.length()==0) return;
-		
-		if (code.equals("account.Disabled"))    
-			throw new RevokedAuthorizationException(message); 
-		else if (code.equals("account.Unauthorized"))
+	{		
+		if (code.equals("account.Forbidden"))    
+			throw new OperationNotPermittedException(message); 
+		else if (code.equals("device.NotFound"))
 			throw new InvalidAuthorizationException(message);
-		else if (code.equals("account.ChangePassword"))
+		else if (code.equals("device.Removed"))
 			throw new InvalidAuthorizationException(message);
-		else if (code.equals("account.VerificationPending"))
-			throw new UppidyApiVerificationException(message);
-		else if (code.equals("account.NoEmpty"))
-			throw new RevokedAuthorizationException(message);
-		else if (code.equals("account.Forbidden"))		
-			throw new InvalidAuthorizationException( message );
-		// none of the above listed codes
-		else throw new UppidyApiValidationException(message);
+		else if (code.equals("device.AccountDoesntMatch"))
+			throw new OperationNotPermittedException(message);
+		else if (code.equals("device.AccountDoesntMatch"))
+			throw new OperationNotPermittedException(message);
+		else if (code.equals("server.EmailServerDown"))
+			throw new UppidyApiException(message);
+		else if (code.equals("server.Internal"))
+			throw new UppidyApiException(message);		
+		// none of the above listed codes, for instance: device.number.NotEmpty
+		else 
+			throw new UppidyApiValidationException(message);
 	}
 
 	private void handleUncategorizedError(ClientHttpResponse response, Map<String, Object> errorDetails) {
