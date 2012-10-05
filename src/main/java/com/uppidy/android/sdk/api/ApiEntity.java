@@ -74,6 +74,7 @@ public class ApiEntity extends ApiObject {
 		}	
 	}
 	
+	// TODO unexpected NullPointerException is thrown from this method. Need to find out why
 	public static void copyFromRefs(Collection<? extends ApiEntity> entities, MultiValueMap<String, ApiEntity> map) {
 		if(entities != null && map != null) {
 			for(ApiEntity entity : entities) {
