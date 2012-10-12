@@ -135,9 +135,9 @@ public abstract class BackupService extends IntentService
 		MessageProvider mp = null;		
 		try
 		{
-			String action = intent.getAction();
+			String action = (intent==null) ? null : intent.getAction();
 
-			if( action.equals( ACTION_BACKUP_ALL ) ) 
+			if( ACTION_BACKUP_ALL.equals(action) ) 
 	    	{
 				boolean somethingDone = true;
 				while( somethingDone )

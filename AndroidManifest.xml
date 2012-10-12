@@ -3,4 +3,7 @@
     package="com.uppidy.android.sdk"
     android:versionCode="1"
     android:versionName="12.07-SNAPSHOT" >
+        <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="7" />
 </manifest>
